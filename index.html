@@ -1,0 +1,2330 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pendekar Pusaka Nusantara - Edisi Smart TV Kelas 6 SD</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Plus Jakarta Sans & Rowdies -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Rowdies:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Tone.js for Web Audio Synthesizer -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            game: ['"Rowdies"', 'cursive', 'sans-serif'],
+          },
+          colors: {
+            game: {
+              gold: '#fbbf24',
+              amber: '#f59e0b',
+              emerald: '#10b981',
+              ruby: '#f43f5e',
+              sapphire: '#0ea5e9',
+              purple: '#8b5cf6',
+              cyan: '#06b6d4',
+              dark: '#080c14',
+              panel: '#0f172a',
+              card: '#1e293b',
+              border: '#334155'
+            }
+          },
+          animation: {
+            'bounce-slow': 'bounce 2.5s infinite',
+            'pulse-fast': 'pulse 0.9s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'floating 3s ease-in-out infinite',
+            'shake': 'shake 0.4s cubic-bezier(.36,.07,.19,.97) both',
+            'spin-slow': 'spin 12s linear infinite',
+          },
+          keyframes: {
+            floating: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-8px)' },
+            },
+            shake: {
+              '10%, 90%': { transform: 'translate3d(-3px, 0, 0)' },
+              '20%, 80%': { transform: 'translate3d(5px, 0, 0)' },
+              '30%, 50%, 70%': { transform: 'translate3d(-7px, 0, 0)' },
+              '40%, 60%': { transform: 'translate3d(7px, 0, 0)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      user-select: none;
+      -webkit-user-select: none;
+      background: radial-gradient(circle at 50% 12%, #1e293b 0%, #060911 100%);
+      color: #f8fafc;
+      overflow-x: hidden;
+      touch-action: manipulation;
+    }
+    .tv-btn {
+      transition: all 0.16s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .tv-btn:active {
+      transform: scale(0.94);
+    }
+    .glow-gold {
+      box-shadow: 0 0 26px rgba(251, 191, 36, 0.45);
+    }
+    .glow-cyan {
+      box-shadow: 0 0 26px rgba(6, 182, 212, 0.45);
+    }
+    .glow-ruby {
+      box-shadow: 0 0 26px rgba(244, 63, 94, 0.5);
+    }
+    .glow-emerald {
+      box-shadow: 0 0 26px rgba(16, 185, 129, 0.45);
+    }
+    .text-glow {
+      text-shadow: 0 0 16px rgba(251, 191, 36, 0.7);
+    }
+    .wheel-pointer {
+      width: 0;
+      height: 0;
+      border-left: 22px solid transparent;
+      border-right: 22px solid transparent;
+      border-top: 38px solid #ef4444;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.8));
+    }
+    .stamp-ttd {
+      font-family: 'Brush Script MT', cursive, sans-serif;
+      transform: rotate(-8deg);
+      border: 2px dashed #10b981;
+      padding: 2px 10px;
+      border-radius: 8px;
+      color: #34d399;
+      display: inline-block;
+    }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #080c14; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans text-slate-100">
+
+  <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50 w-full h-full"></canvas>
+
+  <header class="w-full bg-slate-900/95 backdrop-blur-md border-b-2 border-slate-800 px-3 md:px-6 py-2.5 sticky top-0 z-40 flex flex-wrap items-center justify-between gap-3 shadow-2xl">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-tr from-amber-400 via-rose-500 to-cyan-500 p-0.5 shadow-xl flex items-center justify-center animate-pulse-fast">
+        <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center text-amber-400 text-2xl font-black">
+          <i class="fa-solid fa-khanda"></i>
+        </div>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="bg-amber-500/20 text-amber-300 text-[10px] md:text-xs px-2.5 py-0.5 rounded-full font-black uppercase tracking-wider border border-amber-500/40">
+            IPAS KELAS 6 • BAB 4 LENGKAP
+          </span>
+          <span class="bg-cyan-500/20 text-cyan-300 text-[10px] md:text-xs px-2.5 py-0.5 rounded-full font-bold border border-cyan-500/40 hidden sm:inline-block">
+            EDISI LAYAR SENTUH SMART TV
+          </span>
+        </div>
+        <h1 class="text-base md:text-xl lg:text-2xl font-black font-game tracking-wider text-white flex items-center gap-2 text-glow">
+          PENDEKAR PUSAKA NUSANTARA
+        </h1>
+      </div>
+    </div>
+
+    <!-- Navigation Bar Modes -->
+    <nav class="flex items-center gap-1.5 md:gap-2 bg-slate-950/90 p-1.5 rounded-2xl border border-slate-800 overflow-x-auto max-w-full">
+      <button onclick="switchGameMode('quest')" id="nav-btn-quest" class="tv-btn px-3 md:px-4 py-2 rounded-xl font-game text-xs md:text-sm flex items-center gap-2 bg-amber-500 text-slate-950 shadow-md shrink-0">
+        <i class="fa-solid fa-map-location-dot"></i>
+        <span>PETA RPG</span>
+      </button>
+      <button onclick="switchGameMode('duel')" id="nav-btn-duel" class="tv-btn px-3 md:px-4 py-2 rounded-xl font-game text-xs md:text-sm flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800 shrink-0">
+        <i class="fa-solid fa-bolt text-rose-400"></i>
+        <span>DUEL BEL CERDAS</span>
+      </button>
+      <button onclick="switchGameMode('arcade')" id="nav-btn-arcade" class="tv-btn px-3 md:px-4 py-2 rounded-xl font-game text-xs md:text-sm flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800 shrink-0">
+        <i class="fa-solid fa-gamepad text-emerald-400"></i>
+        <span>TANGKAP PUSAKA</span>
+      </button>
+      <button onclick="switchGameMode('lab')" id="nav-btn-lab" class="tv-btn px-3 md:px-4 py-2 rounded-xl font-game text-xs md:text-sm flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800 shrink-0">
+        <i class="fa-solid fa-chalkboard-user text-cyan-400"></i>
+        <span>LAB WAWANCARA &amp; INFOGRAFIS</span>
+      </button>
+      <button onclick="switchGameMode('wheel')" id="nav-btn-wheel" class="tv-btn px-3 md:px-4 py-2 rounded-xl font-game text-xs md:text-sm flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800 shrink-0">
+        <i class="fa-solid fa-dharmachakra text-purple-400"></i>
+        <span>RODA GACHA</span>
+      </button>
+      <button onclick="switchGameMode('encyclo')" id="nav-btn-encyclo" class="tv-btn px-3 md:px-4 py-2 rounded-xl font-game text-xs md:text-sm flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800 shrink-0">
+        <i class="fa-solid fa-music text-pink-400"></i>
+        <span>GAMELAN &amp; ENSIKLOPEDIA</span>
+      </button>
+    </nav>
+
+    <!-- Header Actions (Scores, Sound, Fullscreen) -->
+    <div class="flex items-center gap-2">
+      <div class="hidden xl:flex items-center gap-3 bg-slate-950 px-3.5 py-1.5 rounded-xl border border-slate-800 text-xs font-black">
+        <span class="text-rose-400 flex items-center gap-1.5">
+          <i class="fa-solid fa-flag"></i> Garuda: <span id="hud-score-a" class="text-white text-sm">0</span>
+        </span>
+        <span class="text-slate-600">|</span>
+        <span class="text-cyan-400 flex items-center gap-1.5">
+          <i class="fa-solid fa-flag"></i> Rajawali: <span id="hud-score-b" class="text-white text-sm">0</span>
+        </span>
+      </div>
+
+      <button onclick="toggleAudio()" id="audio-toggle-btn" class="tv-btn w-10 h-10 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 flex items-center justify-center text-emerald-400 text-base shadow" title="Suara Musik & Efek Game">
+        <i class="fa-solid fa-volume-high" id="audio-icon"></i>
+      </button>
+      <button onclick="toggleFullscreen()" class="tv-btn w-10 h-10 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 flex items-center justify-center text-slate-200 text-base shadow" title="Layar Penuh TV">
+        <i class="fa-solid fa-expand" id="fullscreen-icon"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto p-3 md:p-6 flex flex-col justify-center">
+
+    <section id="view-quest" class="w-full flex flex-col gap-6">
+      <!-- Player Status Banner with Special Class Powers -->
+      <div class="bg-gradient-to-r from-slate-900 via-game-panel to-slate-900 border-2 border-slate-800 rounded-3xl p-5 md:p-6 shadow-2xl flex flex-wrap items-center justify-between gap-5">
+        <div class="flex items-center gap-4">
+          <div class="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-tr from-amber-500 via-rose-500 to-amber-700 p-1 flex items-center justify-center shadow-lg relative">
+            <i class="fa-solid fa-crown text-3xl md:text-4xl text-slate-950"></i>
+            <span class="absolute -bottom-2 bg-slate-950 border-2 border-amber-400 text-amber-400 text-[10px] md:text-xs font-black px-2.5 rounded-full">
+              LVL <span id="player-level">1</span>
+            </span>
+          </div>
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <h2 id="player-title" class="text-xl md:text-2xl font-game text-white tracking-wide">PENDEKAR PEMULA NUSANTARA</h2>
+              <span id="streak-badge" class="hidden bg-rose-500/20 text-rose-400 border border-rose-500/40 text-xs px-2.5 py-0.5 rounded-full font-black animate-pulse-fast">
+                🔥 COMBO STREAK x2
+              </span>
+            </div>
+            <p class="text-xs md:text-sm text-slate-400 mt-1 max-w-md">Kumpulkan 5 Pusaka Sakti dari 5 Wilayah Nusantara untuk menyatukan kekuatan kearifan bangsa!</p>
+          </div>
+        </div>
+
+        <!-- 3 Jurus Sakti Kelas (Skills) -->
+        <div class="flex items-center gap-2 bg-slate-950 p-2.5 rounded-2xl border border-slate-800">
+          <div class="text-left mr-2">
+            <span class="text-[10px] text-slate-400 font-bold block uppercase tracking-wider">Jurus Bantuan Kelas:</span>
+            <span class="text-xs text-amber-400 font-black">1x Pakai Tiap Pertarungan</span>
+          </div>
+          <button onclick="useSkill('gotongroyong')" id="skill-gotongroyong" class="tv-btn px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-game text-xs flex items-center gap-1.5 shadow" title="Eliminasi 2 pilihan salah (50:50)">
+            <i class="fa-solid fa-people-carry-box"></i>
+            <span>Gotong Royong (50:50)</span>
+          </button>
+          <button onclick="useSkill('noken')" id="skill-noken" class="tv-btn px-3 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-game text-xs flex items-center gap-1.5 shadow" title="Tambah waktu +15 detik">
+            <i class="fa-solid fa-hourglass-start"></i>
+            <span>Noken (+15s)</span>
+          </button>
+          <button onclick="useSkill('sekaten')" id="skill-sekaten" class="tv-btn px-3 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-slate-950 font-game text-xs flex items-center gap-1.5 shadow" title="Gandakan Poin x2">
+            <i class="fa-solid fa-star"></i>
+            <span>Sekaten (2x XP)</span>
+          </button>
+        </div>
+
+        <!-- XP & Relic Counters -->
+        <div class="flex items-center gap-4">
+          <div class="bg-slate-950/90 border border-slate-800 px-5 py-2.5 rounded-2xl text-center">
+            <span class="text-[10px] text-slate-400 uppercase font-black tracking-wider">Total Skor XP</span>
+            <p id="total-xp-display" class="text-2xl font-game text-amber-400 leading-none mt-1">0 XP</p>
+          </div>
+          <div class="bg-slate-950/90 border border-slate-800 px-5 py-2.5 rounded-2xl text-center">
+            <span class="text-[10px] text-slate-400 uppercase font-black tracking-wider">Pusaka Terkumpul</span>
+            <p id="relics-collected-display" class="text-2xl font-game text-emerald-400 leading-none mt-1">0 / 5</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Regional Zone Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+        <!-- 1. PULAU SUMATERA -->
+        <div onclick="startZoneBattle(0)" class="tv-btn bg-slate-900/90 hover:bg-slate-850 border-2 border-emerald-500/40 hover:border-emerald-400 p-5 rounded-3xl shadow-xl cursor-pointer group flex flex-col justify-between relative overflow-hidden">
+          <div class="absolute -right-8 -bottom-8 text-8xl text-emerald-500/10 pointer-events-none group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-archway"></i>
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs px-3 py-1 rounded-full font-bold">
+                Wilayah 1 • Sumatera
+              </span>
+              <span id="badge-island-0" class="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-500">
+                <i class="fa-solid fa-lock"></i>
+              </span>
+            </div>
+            <h3 class="text-xl font-game text-white group-hover:text-emerald-300 transition-colors">GERBANG TABUIK &amp; KAIN ULOS</h3>
+            <p class="text-xs text-slate-400 mt-1 line-clamp-2">Pariaman, Batak, Minangkabau: Arak-arakan Tabuik, busana kain Ulos modern, dan tradisi Malam Bainai.</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-xs font-bold text-emerald-400 flex items-center gap-1">
+              <i class="fa-solid fa-bolt"></i> Pendekar Datuk Tabuik
+            </span>
+            <span class="tv-btn px-4 py-1.5 rounded-xl bg-emerald-600 group-hover:bg-emerald-500 text-slate-950 font-black text-xs">
+              TANTANG! <i class="fa-solid fa-arrow-right ml-1"></i>
+            </span>
+          </div>
+        </div>
+
+        <!-- 2. PULAU JAWA -->
+        <div onclick="startZoneBattle(1)" class="tv-btn bg-slate-900/90 hover:bg-slate-850 border-2 border-amber-500/40 hover:border-amber-400 p-5 rounded-3xl shadow-xl cursor-pointer group flex flex-col justify-between relative overflow-hidden">
+          <div class="absolute -right-8 -bottom-8 text-8xl text-amber-500/10 pointer-events-none group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-landmark-dome"></i>
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs px-3 py-1 rounded-full font-bold">
+                Wilayah 2 • Jawa
+              </span>
+              <span id="badge-island-1" class="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-500">
+                <i class="fa-solid fa-lock"></i>
+              </span>
+            </div>
+            <h3 class="text-xl font-game text-white group-hover:text-amber-300 transition-colors">SEKATEN KERATON &amp; 5 NILAI LUHUR</h3>
+            <p class="text-xs text-slate-400 mt-1 line-clamp-2">Surakarta &amp; Yogyakarta: Gamelan Kyai Gunturmadu memperingati Maulid Nabi, Kebaya modern, dan gotong royong.</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-xs font-bold text-amber-400 flex items-center gap-1">
+              <i class="fa-solid fa-bolt"></i> Empu Kyai Gunturmadu
+            </span>
+            <span class="tv-btn px-4 py-1.5 rounded-xl bg-amber-500 group-hover:bg-amber-400 text-slate-950 font-black text-xs">
+              TANTANG! <i class="fa-solid fa-arrow-right ml-1"></i>
+            </span>
+          </div>
+        </div>
+
+        <!-- 3. BALI & NUSA TENGGARA -->
+        <div onclick="startZoneBattle(2)" class="tv-btn bg-slate-900/90 hover:bg-slate-850 border-2 border-rose-500/40 hover:border-rose-400 p-5 rounded-3xl shadow-xl cursor-pointer group flex flex-col justify-between relative overflow-hidden">
+          <div class="absolute -right-8 -bottom-8 text-8xl text-rose-500/10 pointer-events-none group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-horse"></i>
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="bg-rose-500/20 text-rose-300 border border-rose-500/40 text-xs px-3 py-1 rounded-full font-bold">
+                Wilayah 3 • Flobamora &amp; Bali
+              </span>
+              <span id="badge-island-2" class="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-500">
+                <i class="fa-solid fa-lock"></i>
+              </span>
+            </div>
+            <h3 class="text-xl font-game text-white group-hover:text-rose-300 transition-colors">PASOLA SUMBA &amp; TARI CACI FLORES</h3>
+            <p class="text-xs text-slate-400 mt-1 line-clamp-2">Sumba, Manggarai &amp; Bali: Adu lembing kuda kesuburan, cambuk sportivitas syukur panen, dan upacara Ngaben.</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-xs font-bold text-rose-400 flex items-center gap-1">
+              <i class="fa-solid fa-bolt"></i> Panglima Pasola Sumba
+            </span>
+            <span class="tv-btn px-4 py-1.5 rounded-xl bg-rose-500 group-hover:bg-rose-400 text-slate-950 font-black text-xs">
+              TANTANG! <i class="fa-solid fa-arrow-right ml-1"></i>
+            </span>
+          </div>
+        </div>
+
+        <!-- 4. PULAU SULAWESI -->
+        <div onclick="startZoneBattle(3)" class="tv-btn bg-slate-900/90 hover:bg-slate-850 border-2 border-sky-500/40 hover:border-sky-400 p-5 rounded-3xl shadow-xl cursor-pointer group flex flex-col justify-between relative overflow-hidden">
+          <div class="absolute -right-8 -bottom-8 text-8xl text-sky-500/10 pointer-events-none group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-mountain-sun"></i>
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="bg-sky-500/20 text-sky-300 border border-sky-500/40 text-xs px-3 py-1 rounded-full font-bold">
+                Wilayah 4 • Sulawesi
+              </span>
+              <span id="badge-island-3" class="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-500">
+                <i class="fa-solid fa-lock"></i>
+              </span>
+            </div>
+            <h3 class="text-xl font-game text-white group-hover:text-sky-300 transition-colors">RAMBU SOLO' TANA TORAJA</h3>
+            <p class="text-xs text-slate-400 mt-1 line-clamp-2">Tongkonan Toraja: Upacara pemakaman agung penghormatan arwah leluhur dan pembiasaan tradisi turun-temurun.</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-xs font-bold text-sky-400 flex items-center gap-1">
+              <i class="fa-solid fa-bolt"></i> Tetua Adat Tongkonan
+            </span>
+            <span class="tv-btn px-4 py-1.5 rounded-xl bg-sky-500 group-hover:bg-sky-400 text-slate-950 font-black text-xs">
+              TANTANG! <i class="fa-solid fa-arrow-right ml-1"></i>
+            </span>
+          </div>
+        </div>
+
+        <!-- 5. TANAH PAPUA -->
+        <div onclick="startZoneBattle(4)" class="tv-btn bg-slate-900/90 hover:bg-slate-850 border-2 border-purple-500/40 hover:border-purple-400 p-5 rounded-3xl shadow-xl cursor-pointer group flex flex-col justify-between relative overflow-hidden">
+          <div class="absolute -right-8 -bottom-8 text-8xl text-purple-500/10 pointer-events-none group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-bag-shopping"></i>
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="bg-purple-500/20 text-purple-300 border border-purple-500/40 text-xs px-3 py-1 rounded-full font-bold">
+                Wilayah 5 • Papua
+              </span>
+              <span id="badge-island-4" class="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-500">
+                <i class="fa-solid fa-lock"></i>
+              </span>
+            </div>
+            <h3 class="text-xl font-game text-white group-hover:text-purple-300 transition-colors">NOKEN UNESCO &amp; BAKAR BATU</h3>
+            <p class="text-xs text-slate-400 mt-1 line-clamp-2">Warisan Dunia UNESCO 2012: Tas rajut serat kayu alami melambangkan rahim ibu, bakar batu, dan teknologi digital.</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-xs font-bold text-purple-400 flex items-center gap-1">
+              <i class="fa-solid fa-bolt"></i> Mama Noken Papua
+            </span>
+            <span class="tv-btn px-4 py-1.5 rounded-xl bg-purple-500 group-hover:bg-purple-400 text-slate-950 font-black text-xs">
+              TANTANG! <i class="fa-solid fa-arrow-right ml-1"></i>
+            </span>
+          </div>
+        </div>
+
+        <!-- 6. SHORTCUT DUEL SMART TV -->
+        <div onclick="switchGameMode('duel')" class="tv-btn bg-gradient-to-br from-slate-900 via-rose-950/40 to-slate-900 border-2 border-rose-500 p-5 rounded-3xl shadow-xl cursor-pointer group flex flex-col justify-between relative overflow-hidden">
+          <div class="absolute -right-6 -bottom-6 text-8xl text-rose-400/20 pointer-events-none group-hover:rotate-12 transition-transform">
+            <i class="fa-solid fa-users-viewfinder"></i>
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="bg-rose-500/20 text-rose-300 border border-rose-500/40 text-xs px-3 py-1 rounded-full font-bold">
+                Tantangan Antar Regu TV
+              </span>
+              <span class="animate-bounce text-amber-400 font-bold"><i class="fa-solid fa-star"></i> REBUTAN KELAS</span>
+            </div>
+            <h3 class="text-xl font-game text-white group-hover:text-rose-300">DUEL BEL CERDAS 2 TIM</h3>
+            <p class="text-xs text-slate-300 mt-1">Dua murid maju ke depan Smart TV! Tekan bel warna timmu paling cepat untuk mengunci jawaban.</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-rose-800/60 flex items-center justify-between">
+            <span class="text-xs font-bold text-rose-400">Tim Garuda vs Rajawali</span>
+            <span class="tv-btn px-4 py-1.5 rounded-xl bg-rose-500 text-white font-black text-xs flex items-center gap-1">
+              <i class="fa-solid fa-play"></i> BUKA ARENA BEL
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="view-boss" class="hidden w-full flex-col gap-5">
+      <!-- Boss vs Hero Health Bars -->
+      <div id="battle-arena-box" class="bg-slate-900/90 border-2 border-slate-800 p-5 rounded-3xl shadow-2xl flex flex-col gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+
+          <!-- Left: Hero Status -->
+          <div class="flex items-center gap-4">
+            <div id="player-avatar-box" class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 to-emerald-500 flex items-center justify-center text-3xl text-slate-950 font-black shadow-lg">
+              <i class="fa-solid fa-user-ninja"></i>
+            </div>
+            <div class="flex-1">
+              <div class="flex justify-between items-center mb-1">
+                <span class="font-game text-sm text-amber-400 tracking-wide">PENDEKAR KELAS 6</span>
+                <span id="player-hp-text" class="text-xs font-black text-emerald-400">HP 100 / 100</span>
+              </div>
+              <div class="w-full h-4 bg-slate-950 rounded-full overflow-hidden border border-slate-800 p-0.5">
+                <div id="player-hp-bar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-300 w-full"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Boss Status -->
+          <div class="flex items-center gap-4 flex-row-reverse md:flex-row">
+            <div class="flex-1 text-right md:text-left">
+              <div class="flex justify-between items-center mb-1">
+                <span id="boss-name" class="font-game text-sm text-rose-400 tracking-wide">PENJAGA GERBANG BUDAYA</span>
+                <span id="boss-hp-text" class="text-xs font-black text-rose-400">HP 100 / 100</span>
+              </div>
+              <div class="w-full h-4 bg-slate-950 rounded-full overflow-hidden border border-slate-800 p-0.5">
+                <div id="boss-hp-bar" class="h-full bg-gradient-to-r from-rose-500 to-red-600 rounded-full transition-all duration-300 w-full"></div>
+              </div>
+            </div>
+            <div id="boss-avatar-box" class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-rose-600 to-red-900 flex items-center justify-center text-3xl text-white shadow-lg animate-bounce-slow">
+              <i id="boss-avatar-icon" class="fa-solid fa-dragon"></i>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Boss Question & Choice Actions -->
+      <div id="boss-question-stage" class="bg-slate-900/95 border-2 border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl relative flex flex-col gap-6">
+
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+          <div class="flex items-center gap-3">
+            <span id="battle-question-zone" class="bg-amber-500/20 text-amber-400 text-xs px-3.5 py-1 rounded-full font-game border border-amber-500/40">
+              ZONA 1: SUMATERA
+            </span>
+            <span id="battle-question-count" class="text-xs text-slate-400 font-bold">
+              Pertanyaan 1 / 3
+            </span>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="bg-slate-950 border border-slate-800 px-4 py-2 rounded-xl flex items-center gap-2">
+              <i class="fa-solid fa-clock text-amber-400"></i>
+              <span id="battle-timer" class="font-game text-lg text-white">20s</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3 id="battle-question-prompt" class="text-2xl md:text-3xl font-black text-white leading-snug">
+            Memuat mantra pusaka pertanyaan...
+          </h3>
+          <p id="battle-question-hint" class="text-slate-400 text-xs md:text-sm mt-2 flex items-center gap-1.5">
+            <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
+            Pilih mantra jawaban yang benar untuk melancarkan serangan kritikal pada Bos!
+          </p>
+        </div>
+
+        <!-- 4 Action Choice Buttons -->
+        <div id="battle-answers-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+          <!-- Populated dynamically -->
+        </div>
+
+        <!-- Attack Feedback & Educational Explanation -->
+        <div id="battle-result-feedback" class="hidden bg-slate-950 border-2 border-emerald-500/60 p-5 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4">
+          <div class="flex items-start gap-4">
+            <div id="battle-feedback-icon" class="text-3xl text-emerald-400 shrink-0 mt-1">
+              <i class="fa-solid fa-burst"></i>
+            </div>
+            <div>
+              <h4 id="battle-feedback-title" class="font-game text-lg text-emerald-400">SERANGAN KRITIKAL!</h4>
+              <p id="battle-feedback-text" class="text-xs md:text-sm text-slate-300 mt-1 leading-relaxed"></p>
+            </div>
+          </div>
+          <button onclick="nextBattleTurn()" class="tv-btn px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-game text-sm rounded-xl shadow-lg shrink-0 flex items-center gap-2">
+            <span>SERANGAN BERIKUTNYA</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Victory / Defeat Stage Modal -->
+      <div id="battle-cleared-card" class="hidden bg-slate-900/95 border-2 border-amber-500 p-8 md:p-12 rounded-3xl text-center flex flex-col items-center justify-center gap-5 shadow-2xl">
+        <div class="w-24 h-24 rounded-3xl bg-amber-500/20 text-amber-400 border-2 border-amber-500/40 flex items-center justify-center text-5xl font-black">
+          <i class="fa-solid fa-trophy"></i>
+        </div>
+        <div>
+          <h2 id="battle-cleared-title" class="text-3xl md:text-4xl font-game text-white">PUSAKA BERHASIL DIAMBIL ALIH!</h2>
+          <p id="battle-cleared-desc" class="text-slate-300 text-base md:text-lg mt-2 max-w-xl mx-auto">
+            Kalian berhasil menguasai seluruh filosofi dan nilai kearifan lokal wilayah ini!
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-4 justify-center">
+          <button onclick="switchGameMode('quest')" class="tv-btn px-6 py-3.5 bg-amber-500 text-slate-950 font-game text-sm rounded-2xl shadow-lg">
+            KEMBALI KE PETA NUSANTARA
+          </button>
+          <button onclick="switchGameMode('duel')" class="tv-btn px-6 py-3.5 bg-rose-600 text-white font-game text-sm rounded-2xl shadow-lg">
+            MAIN DUEL BEL KELAS
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-duel" class="hidden w-full flex-col gap-6">
+      <div class="bg-slate-900/90 border-2 border-slate-800 p-5 rounded-3xl shadow-xl flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-rose-500/20 text-rose-400 border border-rose-500/40 flex items-center justify-center text-2xl font-black">
+            <i class="fa-solid fa-bolt"></i>
+          </div>
+          <div>
+            <h2 class="text-xl font-game text-white">DUEL BEL CERDAS CERMAT SMART TV</h2>
+            <p class="text-xs text-slate-400">Dua perwakilan regu maju ke depan TV! Tekan bel merah (A) atau biru (B) untuk mengunci kesempatan menjawab.</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <!-- Teacher Bonus Point Adjuster -->
+          <div class="bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 flex items-center gap-2 text-xs">
+            <span class="text-slate-400 font-bold">Poin Guru:</span>
+            <button onclick="adjustTeamScore('A', 10)" class="text-rose-400 hover:text-white font-bold px-2 py-0.5 bg-slate-900 rounded border border-rose-600/40">+10 Merah</button>
+            <button onclick="adjustTeamScore('B', 10)" class="text-cyan-400 hover:text-white font-bold px-2 py-0.5 bg-slate-900 rounded border border-cyan-600/40">+10 Biru</button>
+          </div>
+          <button onclick="resetDuelScore()" class="tv-btn px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold border border-slate-700">
+            <i class="fa-solid fa-rotate-left mr-1"></i> Reset
+          </button>
+          <button onclick="loadNextDuelQuestion()" class="tv-btn px-4 py-2 bg-amber-500 text-slate-950 rounded-xl text-xs font-game shadow">
+            Soal Berikutnya <i class="fa-solid fa-arrow-right ml-1"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Massive Classroom Buzzers -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- Buzzer Tim Merah -->
+        <div class="bg-gradient-to-b from-rose-950/70 to-slate-900 border-4 border-rose-600/70 p-6 rounded-3xl flex flex-col items-center justify-between text-center shadow-2xl relative overflow-hidden">
+          <div class="flex items-center justify-between w-full">
+            <span class="text-xs font-game bg-rose-600 text-white px-3 py-1 rounded-full">TIM GARUDA MERAH (A)</span>
+            <span id="duel-score-a-big" class="text-3xl font-game text-rose-400">0 Pts</span>
+          </div>
+
+          <div class="my-6">
+            <button onclick="pressBuzzer('A')" id="buzzer-btn-a" class="tv-btn w-44 h-44 md:w-52 md:h-52 rounded-full bg-gradient-to-tr from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 border-8 border-rose-400 text-white font-game text-2xl shadow-2xl flex flex-col items-center justify-center gap-2 active:scale-95 animate-pulse-fast cursor-pointer">
+              <i class="fa-solid fa-hand-pointer text-4xl"></i>
+              <span>TEKAN BEL!</span>
+              <span class="text-[10px] font-sans opacity-80">(Tombol A / Layar TV)</span>
+            </button>
+          </div>
+
+          <p class="text-xs text-rose-300 font-bold">Sentuh lingkaran merah untuk mengunci giliran timmu!</p>
+        </div>
+
+        <!-- Buzzer Tim Biru -->
+        <div class="bg-gradient-to-b from-cyan-950/70 to-slate-900 border-4 border-cyan-600/70 p-6 rounded-3xl flex flex-col items-center justify-between text-center shadow-2xl relative overflow-hidden">
+          <div class="flex items-center justify-between w-full">
+            <span class="text-xs font-game bg-cyan-600 text-slate-950 px-3 py-1 rounded-full">TIM RAJAWALI BIRU (B)</span>
+            <span id="duel-score-b-big" class="text-3xl font-game text-cyan-400">0 Pts</span>
+          </div>
+
+          <div class="my-6">
+            <button onclick="pressBuzzer('B')" id="buzzer-btn-b" class="tv-btn w-44 h-44 md:w-52 md:h-52 rounded-full bg-gradient-to-tr from-cyan-600 to-sky-500 hover:from-cyan-500 hover:to-sky-400 border-8 border-cyan-300 text-slate-950 font-game text-2xl shadow-2xl flex flex-col items-center justify-center gap-2 active:scale-95 animate-pulse-fast cursor-pointer">
+              <i class="fa-solid fa-hand-pointer text-4xl"></i>
+              <span>TEKAN BEL!</span>
+              <span class="text-[10px] font-sans opacity-80">(Tombol L / Layar TV)</span>
+            </button>
+          </div>
+
+          <p class="text-xs text-cyan-300 font-bold">Sentuh lingkaran biru untuk mengunci giliran timmu!</p>
+        </div>
+
+      </div>
+
+      <!-- Active Buzzer Question Card -->
+      <div id="duel-question-box" class="bg-slate-900/95 border-2 border-slate-800 p-6 md:p-8 rounded-3xl shadow-2xl flex flex-col gap-4">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <span id="duel-locked-status" class="text-xs md:text-sm font-game text-amber-400 uppercase tracking-wider">
+            🔔 Menunggu Bel Ditekan oleh Salah Satu Tim...
+          </span>
+          <span id="duel-q-index" class="text-xs font-bold text-slate-400">Tantangan Cepat 1</span>
+        </div>
+
+        <h3 id="duel-q-text" class="text-xl md:text-2xl font-black text-white">
+          Tantangan Soal Cerdas Cermat siap ditampilkan!
+        </h3>
+
+        <!-- Duel Options Grid -->
+        <div id="duel-options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-2">
+          <!-- Populated dynamically -->
+        </div>
+
+        <div id="duel-verdict-box" class="hidden bg-slate-950 p-4 rounded-2xl border border-slate-800 text-center">
+          <p id="duel-verdict-text" class="font-game text-base text-white"></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-arcade" class="hidden w-full flex-col gap-4">
+      <div class="bg-slate-900/90 border-2 border-slate-800 p-4 md:p-5 rounded-3xl shadow-xl flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center text-2xl font-black">
+            <i class="fa-solid fa-gamepad"></i>
+          </div>
+          <div>
+            <h2 class="text-xl font-game text-white">TANGKAP PUSAKA NUSANTARA ARCADE</h2>
+            <p class="text-xs text-slate-400">Tangkap Pusaka Adat (Noken, Gamelan, Keris, Batik, Candi). HINDARI Hoax, Sampah, dan Sikap Egois!</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <div class="bg-slate-950 border border-slate-800 px-4 py-2 rounded-2xl text-center">
+            <span class="text-[10px] text-slate-400 uppercase font-black">Skor Arcade</span>
+            <p id="arcade-score-val" class="text-2xl font-game text-emerald-400 leading-none mt-0.5">0</p>
+          </div>
+          <div class="bg-slate-950 border border-slate-800 px-4 py-2 rounded-2xl text-center">
+            <span class="text-[10px] text-slate-400 uppercase font-black">Waktu</span>
+            <p id="arcade-timer-val" class="text-2xl font-game text-amber-400 leading-none mt-0.5">45s</p>
+          </div>
+          <button onclick="startArcadeGame()" id="arcade-start-btn" class="tv-btn px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-game text-sm rounded-xl shadow-lg">
+            MULAI GAME
+          </button>
+        </div>
+      </div>
+
+      <!-- Arcade Canvas Container -->
+      <div class="relative w-full h-[400px] md:h-[480px] bg-slate-950 rounded-3xl border-4 border-slate-800 overflow-hidden shadow-2xl flex items-center justify-center">
+        <canvas id="arcade-canvas" class="w-full h-full block cursor-none"></canvas>
+
+        <div id="arcade-overlay" class="absolute inset-0 bg-slate-950/85 backdrop-blur-sm flex flex-col items-center justify-center gap-4 p-6 text-center">
+          <div class="text-6xl text-amber-400 animate-bounce">
+            <i class="fa-solid fa-basket-shopping"></i>
+          </div>
+          <h3 class="text-3xl font-game text-white">SIAP TANGKAP PUSAKA?</h3>
+          <p class="text-sm text-slate-300 max-w-md">
+            Gunakan tombol panah ⬅️ ➡️ di keyboard/remot TV atau sentuh tombol geser di bawah layar!
+          </p>
+          <button onclick="startArcadeGame()" class="tv-btn px-8 py-3.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-game text-base rounded-2xl shadow-xl mt-2">
+            TEKAN UNTUK MULAI (45 DETIK)
+          </button>
+        </div>
+      </div>
+
+      <!-- Touch Buttons for TV Screen -->
+      <div class="flex items-center justify-center gap-6 py-2">
+        <button onmousedown="moveArcadePaddle(-40)" ontouchstart="moveArcadePaddle(-40)" class="tv-btn flex-1 max-w-[220px] py-4 rounded-2xl bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-white font-game text-xl flex items-center justify-center gap-2 active:bg-emerald-600">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>GESER KIRI</span>
+        </button>
+        <button onmousedown="moveArcadePaddle(40)" ontouchstart="moveArcadePaddle(40)" class="tv-btn flex-1 max-w-[220px] py-4 rounded-2xl bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-white font-game text-xl flex items-center justify-center gap-2 active:bg-emerald-600">
+          <span>GESER KANAN</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <section id="view-lab" class="hidden w-full flex-col gap-6">
+      <div class="bg-slate-900/90 border-2 border-slate-800 p-5 rounded-3xl shadow-xl flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 flex items-center justify-center text-2xl font-black">
+            <i class="fa-solid fa-chalkboard-user"></i>
+          </div>
+          <div>
+            <h2 class="text-xl font-game text-white">LAB RISET BUDAYA &amp; BUKU TUGAS KELAS</h2>
+            <p class="text-xs text-slate-400">Aktivitas Buku IPAS Hal 90–94: Wawancarai 10 guru/staf sekolah, tabel Amati-Pikirkan-Ingin Tahu, dan infografis 9 aspek tradisi!</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="switchLabSubtab('interview')" id="subtab-btn-interview" class="tv-btn px-4 py-2 rounded-xl text-xs font-bold bg-cyan-600 text-slate-950">
+            Wawancara 10 Guru (Hal 91)
+          </button>
+          <button onclick="switchLabSubtab('reflection')" id="subtab-btn-reflection" class="tv-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">
+            Tabel Amati (Hal 90)
+          </button>
+          <button onclick="switchLabSubtab('study')" id="subtab-btn-study" class="tv-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">
+            Infografis Riset (Hal 94)
+          </button>
+        </div>
+      </div>
+
+      <!-- Subtab 1: Teacher Interview Diary (Page 91) -->
+      <div id="lab-sub-interview" class="flex flex-col gap-5">
+        <div class="bg-slate-900/95 border-2 border-slate-800 rounded-3xl p-6 shadow-2xl flex flex-col gap-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div>
+              <h3 class="font-game text-lg text-cyan-300 flex items-center gap-2">
+                <i class="fa-solid fa-signature"></i> Buku Wawancara 10 Guru &amp; Staf Sekolah
+              </h3>
+              <p class="text-xs text-slate-400 mt-0.5">Pilih guru untuk mewawancarai tradisi keluarga yang masih dipertahankan dan berikan stempel tanda tangan (TTD)!</p>
+            </div>
+            <span class="text-xs font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 px-3 py-1 rounded-full">
+              Tercatat: <span id="interview-count" class="font-black text-amber-400">1</span> / 10 Guru
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-2" id="teachers-roster-grid">
+            <!-- Populated dynamically with 10 teachers -->
+          </div>
+
+          <!-- Active Teacher Interview Detail Card -->
+          <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+            <div class="flex items-start gap-4">
+              <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-cyan-500 to-teal-400 flex items-center justify-center text-slate-950 text-3xl font-black shrink-0 shadow-lg">
+                <i class="fa-solid fa-user-tie"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h4 id="active-teacher-name" class="font-bold text-white text-base">Bu Riris</h4>
+                  <span id="active-teacher-role" class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded-full">Guru Kelas 6</span>
+                </div>
+                <p id="active-teacher-tradition" class="text-xs text-amber-400 font-bold mt-1">
+                  Warisan Budaya: Pakaian Adat Pernikahan &amp; Sungkeman
+                </p>
+                <p id="active-teacher-reason" class="text-xs text-slate-300 mt-1 italic">
+                  "Karena selalu dipakai dalam setiap upacara pernikahan dan mengajarkan rasa hormat serta doa restu orang tua."
+                </p>
+              </div>
+            </div>
+
+            <div class="flex flex-col items-center gap-2 w-full md:w-auto">
+              <div id="teacher-ttd-stamp" class="stamp-ttd text-base font-bold">
+                TTD: Riris, S.Pd
+              </div>
+              <button onclick="stampInterviewSignature()" id="btn-stamp-interview" class="tv-btn w-full px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-game text-xs rounded-xl shadow flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-stamp"></i>
+                <span>STEMPEL TTD KELAS (+20 XP)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Subtab 2: Reflection Table Hal 90 (Amati - Pikirkan - Ingin Tahu) -->
+      <div id="lab-sub-reflection" class="hidden flex-col gap-5">
+        <div class="bg-slate-900/95 border-2 border-slate-800 rounded-3xl p-6 shadow-2xl flex flex-col gap-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="font-game text-lg text-amber-400 flex items-center gap-2">
+              <i class="fa-solid fa-table-list"></i> Tabel Refleksi Buku IPAS Halaman 90
+            </h3>
+            <span class="text-xs bg-amber-500/20 text-amber-300 px-3 py-1 rounded-full font-bold">Interaktif Smart TV</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Amati -->
+            <div class="bg-slate-950 p-4 rounded-2xl border border-emerald-500/40 flex flex-col gap-2">
+              <span class="text-xs font-game text-emerald-400 flex items-center gap-1">
+                <i class="fa-solid fa-eye"></i> 1. AMATI (Apa yang menarik di sekitarmu?)
+              </span>
+              <div class="flex flex-col gap-2 text-xs">
+                <button onclick="setReflection('amati', 'Pakaian kebaya modern dan kain batik pada acara wisuda')" class="tv-btn p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-left border border-slate-800 text-slate-200">
+                  👗 Pakaian Adat &amp; Kebaya Modern
+                </button>
+                <button onclick="setReflection('amati', 'Tradisi gotong royong membersihkan selokan dan pos ronda')" class="tv-btn p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-left border border-slate-800 text-slate-200">
+                  🤝 Gotong Royong Kebersihan Warga
+                </button>
+                <button onclick="setReflection('amati', 'Noken tas rajut serat kayu alami dari Papua')" class="tv-btn p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-left border border-slate-800 text-slate-200">
+                  🎒 Noken Asli Serat Kayu Papua
+                </button>
+              </div>
+            </div>
+
+            <!-- Pikirkan -->
+            <div class="bg-slate-950 p-4 rounded-2xl border border-sky-500/40 flex flex-col gap-2">
+              <span class="text-xs font-game text-sky-400 flex items-center gap-1">
+                <i class="fa-solid fa-brain"></i> 2. PIKIRKAN (Apa yang kamu pikirkan?)
+              </span>
+              <div class="flex flex-col gap-2 text-xs">
+                <button onclick="setReflection('pikirkan', 'Tradisi mempererat kerukunan dan persatuan sesama warga')" class="tv-btn p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-left border border-slate-800 text-slate-200">
+                  ❤️ Mempererat Kerukunan Warga
+                </button>
+                <button onclick="setReflection('pikirkan', 'Kearifan lokal mengajarkan cara arif menjaga kelestarian alam')" class="tv-btn p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-left border border-slate-800 text-slate-200">
+                  🌿 Mengajarkan Keharmonisan Alam
+                </button>
+                <button onclick="setReflection('pikirkan', 'Budaya tetap lestari jika dipadukan teknologi & internet')" class="tv-btn p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-left border border-slate-800 text-slate-200">
+                  💻 Adaptasi Teknologi Digital Modern
+                </button>
+              </div>
+            </div>
+
+            <!-- Ingin Tahu -->
+            <div class="bg-slate-950 p-4 rounded-2xl border border-amber-500/40 flex flex-col gap-2">
+              <span class="text-xs font-game text-amber-400 flex items-center gap-1">
+                <i class="fa-solid fa-question"></i> 3. INGIN TAHU (Apa yang ingin diketahui lebih lanjut?)
+              </span>
+              <div class="flex flex-col gap-2 text-xs">
+                <button onclick="setReflection('ingintahu', 'Bagaimana asal mula diciptakannya tradisi tersebut oleh leluhur?')" class="tv-btn p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-left border border-slate-800 text-slate-200">
+                  📜 Asal Mula Sejarah Tradisi
+                </button>
+                <button onclick="setReflection('ingintahu', 'Alat musik dan simbol doa apa yang digunakan dalam upacara?')" class="tv-btn p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-left border border-slate-800 text-slate-200">
+                  🎶 Alat Musik &amp; Makna Simbol Doa
+                </button>
+                <button onclick="setReflection('ingintahu', 'Bagaimana cara anak muda mengenalkan budaya ke seluruh dunia?')" class="tv-btn p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-left border border-slate-800 text-slate-200">
+                  🌏 Cara Mengenalkan ke Dunia Luas
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 mt-2">
+            <span class="text-xs font-bold text-amber-300 block mb-1">Rangkuman Refleksi di Layar Smart TV:</span>
+            <p id="reflection-summary" class="text-xs md:text-sm text-slate-300 italic">
+              Sentuh pilihan di atas untuk menyusun simpulan refleksi kelas!
+            </p>
+          </div>
+
+          <button onclick="saveClassInfographic()" class="tv-btn w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-game text-xs md:text-sm rounded-xl shadow flex items-center justify-center gap-2">
+            <i class="fa-solid fa-award"></i>
+            <span>SIMPAN SIMPULAN INFOGRAFIS KELAS (+40 XP)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Subtab 3: 9 Study Questions (Page 94) -->
+      <div id="lab-sub-study" class="hidden flex-col gap-5">
+        <div class="bg-slate-900/95 border-2 border-slate-800 rounded-3xl p-6 shadow-2xl flex flex-col gap-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="font-game text-lg text-emerald-400 flex items-center gap-2">
+              <i class="fa-solid fa-list-check"></i> 9 Aspek Studi Literatur Tradisi (Buku Hal 94)
+            </h3>
+            <span class="text-xs bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full font-bold">Panduan Proyek</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+              <span class="text-amber-400 font-bold block mb-1">a. Kapan Tradisi Dilakukan?</span>
+              <p class="text-slate-300">Saat panen raya, pernikahan adat, menyambut tamu agung, atau peringatan hari besar keagamaan.</p>
+            </div>
+            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+              <span class="text-amber-400 font-bold block mb-1">b. Di Mana Asal Daerahnya?</span>
+              <p class="text-slate-300">Disebutkan provinsi, kabupaten, atau desa adat asalnya (contoh: Pariaman, Toraja, Sumba, Papua).</p>
+            </div>
+            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+              <span class="text-amber-400 font-bold block mb-1">c. Apa Bentuk Tradisinya?</span>
+              <p class="text-slate-300">Tarian adat, upacara pemakaman, arak-arakan menara, doa bersama, atau permainan ketangkasan.</p>
+            </div>
+            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+              <span class="text-amber-400 font-bold block mb-1">d. Apa Tujuan Dilakukan?</span>
+              <p class="text-slate-300">Sebagai wujud rasa syukur atas rezeki alam, memohon kesuburan, dan menjalin persaudaraan erat.</p>
+            </div>
+            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+              <span class="text-amber-400 font-bold block mb-1">e. Siapa yang Terlibat?</span>
+              <p class="text-slate-300">Tetua adat, tokoh agama, sanak saudara, serta seluruh warga masyarakat tanpa pamrih.</p>
+            </div>
+            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+              <span class="text-amber-400 font-bold block mb-1">f. Bagaimana Prosesinya?</span>
+              <p class="text-slate-300">Tahapan teratur mulai dari doa pembuka, tabuhan musik adat, hingga perjamuan makan bersama.</p>
+            </div>
+            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+              <span class="text-amber-400 font-bold block mb-1">g. Apa yang Digunakan?</span>
+              <p class="text-slate-300">Pakaian adat daerah, gamelan/gong, tombak/cambuk, makanan khas, dan sesaji perlambang alam.</p>
+            </div>
+            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+              <span class="text-amber-400 font-bold block mb-1">h. Mengapa Masih Bertahan?</span>
+              <p class="text-slate-300">Karena memiliki 6 faktor: nilai mendalam, identitas daerah, rasa hormat, diajarkan sejak dini, dan teknologi.</p>
+            </div>
+            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+              <span class="text-amber-400 font-bold block mb-1">i. Apa Nilai Kearifannya?</span>
+              <p class="text-slate-300">5 Nilai Luhur: Gotong royong, toleransi, musyawarah mufakat, santun menghormati, dan cinta tanah air.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-wheel" class="hidden w-full flex-col gap-6">
+      <div class="bg-slate-900/90 border-2 border-slate-800 p-5 rounded-3xl shadow-xl flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-400 border border-purple-500/40 flex items-center justify-center text-2xl font-black">
+            <i class="fa-solid fa-dharmachakra"></i>
+          </div>
+          <div>
+            <h2 class="text-xl font-game text-white">RODA GACHA PUSAKA &amp; REFLEKSI KELAS</h2>
+            <p class="text-xs text-slate-400">Putar roda untuk memilih tantangan aksi kelas, tebak filosofi, dan peragaan 5 nilai luhur bangsa!</p>
+          </div>
+        </div>
+
+        <span class="text-xs font-bold text-purple-400 bg-purple-500/10 border border-purple-500/30 px-3 py-1.5 rounded-xl">
+          Tantangan Maju ke Depan TV
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+        <!-- Wheel Canvas Column -->
+        <div class="lg:col-span-6 flex flex-col items-center justify-center relative p-3">
+          <div class="wheel-pointer z-20 mb-[-14px]"></div>
+
+          <div class="relative w-[320px] h-[320px] sm:w-[380px] sm:h-[380px] rounded-full p-2 bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 shadow-2xl flex items-center justify-center">
+            <canvas id="wheel-canvas" width="400" height="400" class="w-full h-full rounded-full cursor-pointer"></canvas>
+            <button onclick="spinWheel()" id="spin-center-btn" class="tv-btn absolute w-20 h-20 rounded-full bg-slate-950 border-4 border-amber-400 text-amber-400 font-game text-xs uppercase shadow-2xl flex flex-col items-center justify-center z-20 hover:scale-105">
+              <i class="fa-solid fa-play text-base mb-0.5"></i>
+              <span>PUTAR</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Wheel Result & Challenge Card -->
+        <div class="lg:col-span-6 flex flex-col gap-4">
+          <div class="bg-slate-900/90 border-2 border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col gap-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <span id="wheel-topic-badge" class="text-xs font-game text-purple-400 uppercase tracking-wider">
+                TANTANGAN TERPILIH
+              </span>
+              <span id="wheel-status-badge" class="text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded-full font-bold">
+                SIAP DIPUTAR
+              </span>
+            </div>
+
+            <div>
+              <h3 id="wheel-result-title" class="text-2xl md:text-3xl font-game text-white">
+                PUTAR RODA UNTUK MEMULAI!
+              </h3>
+              <p id="wheel-result-desc" class="text-slate-300 text-sm md:text-base mt-2 leading-relaxed">
+                Roda ini memuat topik refleksi 5 nilai luhur bangsa, adaptasi teknologi, wawancara guru, dan tebak filosofi tradisi nusantara.
+              </p>
+            </div>
+
+            <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex items-start gap-3">
+              <i class="fa-solid fa-lightbulb text-amber-400 text-xl mt-0.5"></i>
+              <div>
+                <h4 class="font-bold text-white text-xs uppercase">Panduan Guru di Smart TV:</h4>
+                <p id="wheel-instruction" class="text-xs text-slate-400 mt-0.5">
+                  Minta murid yang giliran tampil ke depan layar sentuh TV untuk menjawab atau mempraktikkan aksi budaya ini!
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <button onclick="spinWheel()" class="tv-btn w-full py-3.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-game text-sm rounded-2xl shadow-lg flex items-center justify-center gap-2">
+                <i class="fa-solid fa-rotate"></i>
+                <span>PUTAR RODA SEKARANG</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-encyclo" class="hidden w-full flex-col gap-6">
+      <div class="bg-slate-900/90 border-2 border-slate-800 p-5 rounded-3xl shadow-xl flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-pink-500/20 text-pink-400 border border-pink-500/40 flex items-center justify-center text-2xl font-black">
+            <i class="fa-solid fa-music"></i>
+          </div>
+          <div>
+            <h2 class="text-xl font-game text-white">SIMULATOR GAMELAN &amp; ENSIKLOPEDIA PUSAKA</h2>
+            <p class="text-xs text-slate-400">Sentuh bilah gamelan pentatonis Jawa Kyai Gunturmadu dan pelajari seluruh filosofi kearifan lokal Bab 4!</p>
+          </div>
+        </div>
+
+        <span class="text-xs bg-slate-800 text-amber-300 font-bold px-3 py-1.5 rounded-xl border border-slate-700">
+          Instrumen Pentatonis Pelog/Slendro
+        </span>
+      </div>
+
+      <!-- Interactive Gamelan Keys (Touch Soundboard) -->
+      <div class="bg-slate-900/95 border-2 border-slate-800 rounded-3xl p-6 shadow-2xl flex flex-col gap-4">
+        <h3 class="font-game text-sm text-amber-400 uppercase tracking-wider flex items-center gap-2">
+          <i class="fa-solid fa-bell"></i> Mainkan Nada Gamelan Kyai Gunturmadu di Layar Sentuh TV:
+        </h3>
+        <div class="grid grid-cols-2 sm:grid-cols-6 gap-3">
+          <button onclick="playGamelanNote('C4', '1 (Ji)')" class="tv-btn p-5 rounded-2xl bg-gradient-to-t from-amber-900/60 to-slate-900 border-2 border-amber-500 hover:border-amber-300 text-center flex flex-col items-center justify-center gap-1 shadow-lg active:scale-95">
+            <span class="text-2xl font-game text-amber-300">1</span>
+            <span class="text-xs font-bold text-slate-300">Ji (Penunggul)</span>
+            <span class="text-[10px] text-amber-400/80">Nada C</span>
+          </button>
+          <button onclick="playGamelanNote('D4', '2 (Ro)')" class="tv-btn p-5 rounded-2xl bg-gradient-to-t from-amber-900/60 to-slate-900 border-2 border-amber-500 hover:border-amber-300 text-center flex flex-col items-center justify-center gap-1 shadow-lg active:scale-95">
+            <span class="text-2xl font-game text-amber-300">2</span>
+            <span class="text-xs font-bold text-slate-300">Ro (Gulu)</span>
+            <span class="text-[10px] text-amber-400/80">Nada D</span>
+          </button>
+          <button onclick="playGamelanNote('E4', '3 (Lu)')" class="tv-btn p-5 rounded-2xl bg-gradient-to-t from-amber-900/60 to-slate-900 border-2 border-amber-500 hover:border-amber-300 text-center flex flex-col items-center justify-center gap-1 shadow-lg active:scale-95">
+            <span class="text-2xl font-game text-amber-300">3</span>
+            <span class="text-xs font-bold text-slate-300">Lu (Dhadha)</span>
+            <span class="text-[10px] text-amber-400/80">Nada E</span>
+          </button>
+          <button onclick="playGamelanNote('G4', '5 (Ma)')" class="tv-btn p-5 rounded-2xl bg-gradient-to-t from-amber-900/60 to-slate-900 border-2 border-amber-500 hover:border-amber-300 text-center flex flex-col items-center justify-center gap-1 shadow-lg active:scale-95">
+            <span class="text-2xl font-game text-amber-300">5</span>
+            <span class="text-xs font-bold text-slate-300">Ma (Lima)</span>
+            <span class="text-[10px] text-amber-400/80">Nada G</span>
+          </button>
+          <button onclick="playGamelanNote('A4', '6 (Nem)')" class="tv-btn p-5 rounded-2xl bg-gradient-to-t from-amber-900/60 to-slate-900 border-2 border-amber-500 hover:border-amber-300 text-center flex flex-col items-center justify-center gap-1 shadow-lg active:scale-95">
+            <span class="text-2xl font-game text-amber-300">6</span>
+            <span class="text-xs font-bold text-slate-300">Nem (Nem)</span>
+            <span class="text-[10px] text-amber-400/80">Nada A</span>
+          </button>
+          <button onclick="playGamelanNote('C3', 'GONG')" class="tv-btn p-5 rounded-2xl bg-gradient-to-t from-rose-900/60 to-slate-900 border-2 border-rose-500 hover:border-rose-300 text-center flex flex-col items-center justify-center gap-1 shadow-lg active:scale-95">
+            <i class="fa-solid fa-bullseye text-2xl text-rose-400"></i>
+            <span class="text-xs font-bold text-slate-100 font-game">GONG GEDE</span>
+            <span class="text-[10px] text-rose-300">Bass Rendah</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 4 Core Pillars of Cultural Wisdom -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-slate-900/90 border-2 border-slate-800 p-5 rounded-3xl flex flex-col gap-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl font-black">
+            <i class="fa-solid fa-landmark"></i>
+          </div>
+          <h4 class="font-game text-base text-white">1. Warisan Budaya</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Hasil cipta, rasa, dan karsa leluhur: Candi Borobudur, Rumah Tongkonan/Gadang, Kain Tenun Ulos/Batik, dan Keris pusaka.
+          </p>
+        </div>
+        <div class="bg-slate-900/90 border-2 border-slate-800 p-5 rounded-3xl flex flex-col gap-3">
+          <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-xl font-black">
+            <i class="fa-solid fa-masks-theater"></i>
+          </div>
+          <h4 class="font-game text-base text-white">2. Tradisi Daerah</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Keunikan turun-temurun: Tabuik Pariaman (silaturahmi), Rambu Solo' Toraja (bakti leluhur), Tari Caci Flores (sportivitas syukur panen).
+          </p>
+        </div>
+        <div class="bg-slate-900/90 border-2 border-slate-800 p-5 rounded-3xl flex flex-col gap-3">
+          <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xl font-black">
+            <i class="fa-solid fa-shield-heart"></i>
+          </div>
+          <h4 class="font-game text-base text-white">3. 5 Nilai Luhur Bangsa</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Karakter bangsa: Gotong royong, toleransi beragama, musyawarah mufakat, hormat santun pada orang tua, dan cinta tanah air.
+          </p>
+        </div>
+        <div class="bg-slate-900/90 border-2 border-slate-800 p-5 rounded-3xl flex flex-col gap-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl font-black">
+            <i class="fa-solid fa-seedling"></i>
+          </div>
+          <h4 class="font-game text-base text-white">4. Aksi Pelajar Nyata</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            4 Cara Melestarikan: Mempelajari maknanya, menggunakan produk lokal, mengikuti kegiatan perayaan adat, dan mengenalkan lewat digital.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="grand-victory-modal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="bg-slate-900 border-4 border-amber-400 max-w-xl w-full rounded-3xl p-6 md:p-8 text-center flex flex-col items-center gap-5 shadow-2xl relative animate-float">
+      <div class="w-24 h-24 rounded-3xl bg-amber-500/20 text-amber-400 border-2 border-amber-500/40 flex items-center justify-center text-5xl">
+        <i class="fa-solid fa-certificate"></i>
+      </div>
+      <div>
+        <span class="bg-amber-500/20 text-amber-300 text-xs px-3 py-1 rounded-full font-game uppercase tracking-wider border border-amber-500/40">
+          GELAR TERTINGGI IPAS KELAS 6
+        </span>
+        <h2 class="text-2xl md:text-3xl font-game text-white mt-2">DUTA BESAR KELESTARIAN NUSANTARA</h2>
+        <p class="text-xs md:text-sm text-slate-300 mt-2">
+          Hebat sekali! Kalian telah menguasai seluruh filosofi, keunikan tradisi adat, adaptasi zaman, serta 5 Nilai Luhur Budaya Indonesia!
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3 w-full">
+        <div class="bg-slate-950 p-3 rounded-2xl border border-slate-800 text-center">
+          <span class="text-[10px] text-slate-400 uppercase font-black">Total XP Selesai</span>
+          <p id="victory-modal-xp" class="text-2xl font-game text-amber-400">1000 XP</p>
+        </div>
+        <div class="bg-slate-950 p-3 rounded-2xl border border-slate-800 text-center">
+          <span class="text-[10px] text-slate-400 uppercase font-black">Karakter Bangsa</span>
+          <p class="text-2xl font-game text-emerald-400">PANCASILA</p>
+        </div>
+      </div>
+
+      <p class="text-xs text-amber-300 italic font-semibold">
+        "Lestarikan Budaya, Kuatkan Persatuan, Majukan Indonesia!"
+      </p>
+
+      <button onclick="closeVictoryModal()" class="tv-btn w-full py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-game text-sm rounded-2xl shadow-xl">
+        LANJUTKAN MISI BUDAYA!
+      </button>
+    </div>
+  </div>
+
+  <footer class="w-full bg-slate-950 border-t border-slate-800 px-6 py-2.5 text-center text-[11px] text-slate-400 flex flex-wrap items-center justify-between gap-2">
+    <div class="flex items-center gap-2">
+      <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+      <span class="font-black text-slate-300">Media Interaktif Layar Sentuh Smart TV SD</span>
+    </div>
+    <p class="text-slate-400">
+      Materi: IPAS Kelas 6 Bab 4 (Filosofi, Tradisi Adat, Adaptasi Budaya &amp; 5 Nilai Luhur)
+    </p>
+    <div class="text-amber-400 font-bold">
+      Gunakan Remot TV / Layar Sentuh / Tombol A-Z dan K-L
+    </div>
+  </footer>
+
+  <script>
+    /* Audio synthesizer system */
+    let audioEnabled = true;
+    let synth = null;
+    let attackSynth = null;
+    let fanSynth = null;
+    let buzzerSynth = null;
+    let gamelanSynth = null;
+
+    function initAudio() {
+      if (!synth && window.Tone) {
+        try {
+          Tone.start();
+          synth = new Tone.PolySynth(Tone.Synth, {
+            oscillator: { type: 'triangle' },
+            envelope: { attack: 0.01, decay: 0.1, sustain: 0.2, release: 0.2 }
+          }).toDestination();
+          synth.volume.value = -6;
+
+          attackSynth = new Tone.PolySynth(Tone.Synth, {
+            oscillator: { type: 'sawtooth' },
+            envelope: { attack: 0.01, decay: 0.2, sustain: 0.0, release: 0.1 }
+          }).toDestination();
+          attackSynth.volume.value = -4;
+
+          fanSynth = new Tone.PolySynth(Tone.Synth, {
+            oscillator: { type: 'sine' },
+            envelope: { attack: 0.02, decay: 0.2, sustain: 0.3, release: 0.6 }
+          }).toDestination();
+          fanSynth.volume.value = -3;
+
+          buzzerSynth = new Tone.PolySynth(Tone.Synth, {
+            oscillator: { type: 'square' },
+            envelope: { attack: 0.01, decay: 0.15, sustain: 0.1, release: 0.1 }
+          }).toDestination();
+          buzzerSynth.volume.value = -2;
+
+          gamelanSynth = new Tone.PolySynth(Tone.FMSynth, {
+            harmonicity: 3.01,
+            modulationIndex: 12,
+            envelope: { attack: 0.01, decay: 1.2, sustain: 0.1, release: 1.5 }
+          }).toDestination();
+          gamelanSynth.volume.value = -3;
+        } catch (e) {
+          console.warn('Audio Context init:', e);
+        }
+      }
+    }
+
+    function playSound(type) {
+      if (!audioEnabled) return;
+      initAudio();
+      if (!synth) return;
+
+      try {
+        const now = Tone.now();
+        if (type === 'click') {
+          synth.triggerAttackRelease(['C5'], '16n', now);
+        } else if (type === 'buzzerA') {
+          buzzerSynth.triggerAttackRelease(['F4', 'A4'], '8n', now);
+        } else if (type === 'buzzerB') {
+          buzzerSynth.triggerAttackRelease(['C5', 'G5'], '8n', now);
+        } else if (type === 'hit') {
+          attackSynth.triggerAttackRelease(['G2', 'C3'], '16n', now);
+        } else if (type === 'crit') {
+          attackSynth.triggerAttackRelease(['E4', 'G4', 'B4', 'E5'], '8n', now);
+        } else if (type === 'hurt') {
+          attackSynth.triggerAttackRelease(['F2', 'D2'], '8n', now);
+        } else if (type === 'coin') {
+          fanSynth.triggerAttackRelease(['E5', 'B5'], '16n', now);
+        } else if (type === 'spin') {
+          synth.triggerAttackRelease(['A4'], '32n', now);
+        } else if (type === 'victory') {
+          fanSynth.triggerAttackRelease(['C5', 'E5', 'G5', 'C6'], '8n', now);
+        }
+      } catch (err) {
+        // Safe silence if context interrupted
+      }
+    }
+
+    function playGamelanNote(note, label) {
+      playSound('click');
+      initAudio();
+      if (gamelanSynth) {
+        try {
+          gamelanSynth.triggerAttackRelease(note, '1n');
+        } catch (e) {}
+      }
+    }
+
+    function toggleAudio() {
+      audioEnabled = !audioEnabled;
+      const icon = document.getElementById('audio-icon');
+      const btn = document.getElementById('audio-toggle-btn');
+      if (audioEnabled) {
+        icon.className = 'fa-solid fa-volume-high';
+        btn.classList.add('text-emerald-400');
+        btn.classList.remove('text-slate-500');
+        playSound('click');
+      } else {
+        icon.className = 'fa-solid fa-volume-xmark';
+        btn.classList.remove('text-emerald-400');
+        btn.classList.add('text-slate-500');
+      }
+    }
+
+    function toggleFullscreen() {
+      const doc = document.documentElement;
+      const icon = document.getElementById('fullscreen-icon');
+      if (!document.fullscreenElement) {
+        if (doc.requestFullscreen) doc.requestFullscreen();
+        icon.className = 'fa-solid fa-compress';
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+        icon.className = 'fa-solid fa-expand';
+      }
+    }
+
+    let playerXP = 0;
+    let playerLevel = 1;
+    let unlockedIslands = [false, false, false, false, false];
+    let comboStreak = 0;
+    let doubleXpActive = false;
+
+    // Team Score Tracking
+    let scoreTeamA = 0;
+    let scoreTeamB = 0;
+
+    function switchGameMode(mode) {
+      playSound('click');
+      const modes = ['quest', 'boss', 'duel', 'arcade', 'lab', 'wheel', 'encyclo'];
+      modes.forEach(m => {
+        const sec = document.getElementById(`view-${m}`);
+        const btn = document.getElementById(`nav-btn-${m}`);
+        if (m === mode) {
+          sec.classList.remove('hidden');
+          sec.classList.add('flex');
+          if (btn) btn.className = 'tv-btn px-3 md:px-4 py-2 rounded-xl font-game text-xs md:text-sm flex items-center gap-2 bg-amber-500 text-slate-950 shadow-md shrink-0';
+        } else {
+          sec.classList.add('hidden');
+          sec.classList.remove('flex');
+          if (btn) btn.className = 'tv-btn px-3 md:px-4 py-2 rounded-xl font-game text-xs md:text-sm flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800 shrink-0';
+        }
+      });
+
+      if (mode === 'wheel') drawWheel();
+      if (mode === 'duel') loadNextDuelQuestion();
+    }
+
+    function addXP(amount) {
+      const actualAmount = doubleXpActive ? amount * 2 : amount;
+      doubleXpActive = false;
+      playerXP += actualAmount;
+      document.getElementById('total-xp-display').innerText = `${playerXP} XP`;
+      document.getElementById('victory-modal-xp').innerText = `${playerXP} XP`;
+
+      const prevLvl = playerLevel;
+      playerLevel = Math.floor(playerXP / 200) + 1;
+      document.getElementById('player-level').innerText = playerLevel;
+
+      if (playerLevel > prevLvl) {
+        playSound('victory');
+        const titles = [
+          "PENDEKAR PEMULA NUSANTARA", 
+          "PENJELAJAH ADAT PRAKTIK", 
+          "SATRIA KEARIFAN LOKAL", 
+          "DUTA PUSAKA BUDAYA", 
+          "MAHAGURU KELESTARIAN BANGSA"
+        ];
+        document.getElementById('player-title').innerText = titles[Math.min(playerLevel - 1, titles.length - 1)];
+      }
+    }
+
+    const zoneData = [
+      {
+        zoneName: "WILAYAH 1: SUMATERA (TABUIK, ULOS & BAINAI)",
+        bossName: "PENDEKAR DATUK TABUIK",
+        bossIcon: "fa-archway",
+        questions: [
+          {
+            q: "Upacara mengarak menara megah di Pariaman (Sumbar) sebagai simbol kebersamaan masyarakat adalah...",
+            options: ["Tradisi Tabuik", "Tradisi Sekaten", "Tradisi Caci", "Tradisi Pasola"],
+            correct: 0,
+            explain: "Tradisi Tabuik diselenggarakan di pesisir Pariaman, Sumatera Barat, mempererat silaturahmi dan kebersamaan warga."
+          },
+          {
+            q: "Kain tradisional suku Batak yang sarat doa restu dan kini dimodifikasi menjadi busana modern adalah...",
+            options: ["Kain Sasirangan", "Kain Ulos", "Kain Songket", "Kain Batik"],
+            correct: 1,
+            explain: "Kain Ulos dari Sumatera Utara diwariskan turun-temurun dan kini beradaptasi secara modis dalam peragaan busana modern."
+          },
+          {
+            q: "Tradisi adat malam sebelum pernikahan di Minangkabau yang menggunakan daun inai disebut...",
+            options: ["Malam Bainai", "Rambu Solo'", "Bakar Batu", "Sekaten"],
+            correct: 0,
+            explain: "Buku Hal 93: Malam bainai adalah tradisi memakaikan daun inai ke kuku calon pengantin wanita di Minangkabau sebagai ungkapan kasih sayang keluarga."
+          }
+        ]
+      },
+      {
+        zoneName: "WILAYAH 2: JAWA (SEKATEN & 5 NILAI LUHUR)",
+        bossName: "EMPU KYAI GUNTURMADU",
+        bossIcon: "fa-bell",
+        questions: [
+          {
+            q: "Apakah makna kata 'Filosofi' menurut buku IPAS Kelas 6 Hal 90?",
+            options: [
+              "Pemikiran yang mengajarkan kebaikan, kebijaksanaan, dan kepedulian",
+              "Aturan untuk melarang budaya daerah luar masuk ke Indonesia",
+              "Pakaian mahal yang hanya boleh dipakai saat pesta besar",
+              "Cerita khayalan zaman dahulu yang tidak memiliki pesan moral"
+            ],
+            correct: 0,
+            explain: "Filosofi adalah pemikiran mendalam yang mengajarkan kebaikan, kebijaksanaan, dan kepedulian sesama."
+          },
+          {
+            q: "Tradisi Sekaten di Surakarta dan Yogyakarta diadakan setiap tahun untuk memperingati...",
+            options: [
+              "Tahun Baru Masehi dengan pesta kembang api",
+              "Maulid Nabi Muhammad SAW dengan alunan gamelan keraton",
+              "Hari panen raya padi di persawahan kerajaan",
+              "Pemberian gelar kehormatan untuk prajurit berkuda"
+            ],
+            correct: 1,
+            explain: "Sekaten memperingati Maulid Nabi Muhammad SAW dengan gamelan pusaka Kyai Gunturmadu di Masjid Gedhe Kauman."
+          },
+          {
+            q: "Manakah yang merupakan 5 Nilai Luhur Budaya Indonesia menurut rangkuman Bab 4?",
+            options: [
+              "Gotong royong, Toleransi, Musyawarah, Hormat & santun, Cinta tanah air",
+              "Persaingan bebas, Membeli barang impor, Menutup diri dari teman",
+              "Kemewahan, Sikap individualis, Membanggakan suku sendiri saja",
+              "Membeli tradisi dari luar negeri dan melupakan budaya asli"
+            ],
+            correct: 0,
+            explain: "5 Nilai Luhur bangsa: Gotong royong, Toleransi, Musyawarah, Hormat & santun, serta Cinta tanah air."
+          }
+        ]
+      },
+      {
+        zoneName: "WILAYAH 3: FLOBAMORA & BALI (PASOLA & TARI CACI)",
+        bossName: "PANGLIMA PASOLA SUMBA",
+        bossIcon: "fa-horse",
+        questions: [
+          {
+            q: "Tradisi melempar lembing kayu dari atas kuda untuk memohon kesuburan tanah di Sumba (NTT) disebut...",
+            options: ["Tradisi Pasola", "Tradisi Karapan Sapi", "Tradisi Caci", "Tradisi Rambu Solo'"],
+            correct: 0,
+            explain: "Pasola Sumba adalah adu ketangkasan menunggang kuda dan lempar lembing menyambut musim tanam agar hasil panen melimpah."
+          },
+          {
+            q: "Tarian perang cambuk di Manggarai Flores (NTT) yang menjadi wujud syukur panen dan sportivitas adalah...",
+            options: ["Tari Pendet", "Tari Caci", "Tari Saman", "Tari Piring"],
+            correct: 1,
+            explain: "Tradisi tari Caci menguji ketangkasan dan sportivitas dua ksatria menggunakan cambuk dan perisai kulit kerbau."
+          },
+          {
+            q: "Upacara pembakaran jenazah di Bali sebagai wujud penghormatan pelepasan jiwa leluhur adalah...",
+            options: ["Ngaben", "Sekaten", "Tabuik", "Pasola"],
+            correct: 0,
+            explain: "Buku Hal 93: Upacara Ngaben di Bali merupakan tradisi pembakaran jenazah adat suci untuk mengembalikan unsur jasad ke alam semesta."
+          }
+        ]
+      },
+      {
+        zoneName: "WILAYAH 4: SULAWESI (RAMBU SOLO' TORAJA)",
+        bossName: "TETUA ADAT TONGKONAN",
+        bossIcon: "fa-mountain-sun",
+        questions: [
+          {
+            q: "Upacara pemakaman adat suku Toraja sebagai penghormatan terakhir kepada arwah leluhur dinamakan...",
+            options: ["Rambu Solo'", "Ngaben", "Tiwah", "Sekaten"],
+            correct: 0,
+            explain: "Rambu Solo' di Tana Toraja merupakan upacara pemakaman adat agung wujud bakti anak kepada orang tua dan leluhur."
+          },
+          {
+            q: "Mengapa tradisi seperti mencium tangan orang tua dan silaturahmi tetap lestari sampai saat ini?",
+            options: [
+              "Karena diajarkan dan dibiasakan turun-temurun sejak kecil",
+              "Karena ada denda dari pemerintah jika tidak dilakukan",
+              "Karena memerlukan biaya paling mahal di dunia",
+              "Karena dilakukan secara rahasia dan tertutup"
+            ],
+            correct: 0,
+            explain: "Faktor ke-4 pelestarian budaya: Diajarkan turun-temurun oleh keluarga melalui teladan perbuatan nyata sejak dini."
+          },
+          {
+            q: "Rumah adat suku Toraja yang memiliki atap melengkung menyerupai perahu disebut...",
+            options: ["Rumah Tongkonan", "Rumah Gadang", "Rumah Joglo", "Rumah Honai"],
+            correct: 0,
+            explain: "Rumah Tongkonan adalah rumah adat kebanggaan Toraja tempat keluarga bermusyawarah dan menyelenggarakan upacara adat."
+          }
+        ]
+      },
+      {
+        zoneName: "WILAYAH 5: PAPUA (NOKEN & BAKAR BATU)",
+        bossName: "MAMA NOKEN PAPUA",
+        bossIcon: "fa-feather",
+        questions: [
+          {
+            q: "Tas rajut tradisional Papua yang diakui UNESCO tahun 2012 sebagai Warisan Budaya Takbenda Dunia adalah...",
+            options: ["Noken", "Tas Rotan", "Tas Daun Pandan", "Tas Songket"],
+            correct: 0,
+            explain: "Noken dirajut dari serat kayu alami, dibawa di kepala, melambangkan rahim ibu, perdamaian, dan diakui UNESCO tahun 2012."
+          },
+          {
+            q: "Tradisi memasak bersama menggunakan batu panas di Papua untuk mempererat persaudaraan dan perdamaian adalah...",
+            options: ["Tradisi Bakar Batu", "Tradisi Pasola", "Tradisi Rambu Solo'", "Tradisi Sekaten"],
+            correct: 0,
+            explain: "Tradisi Bakar Batu merupakan ritual memasak bersama suku Papua sebagai wujud rasa syukur dan lambang perdamaian antarwarga."
+          },
+          {
+            q: "Bagaimana cara generasi muda memanfaatkan teknologi untuk melestarikan Noken dan Batik?",
+            options: [
+              "Mempromosikan dan memasarkan kriya adat lewat toko online dan media sosial",
+              "Melarang teman sekolah mempelajari budaya di internet",
+              "Mengganti seluruh bahan alami Noken dengan plastik sekali pakai",
+              "Menghapus informasi kerajinan daerah dari internet"
+            ],
+            correct: 0,
+            explain: "Faktor ke-6 pelestarian: Mampu beradaptasi dengan perkembangan teknologi, contohnya pemasaran produk kriya lokal secara digital."
+          }
+        ]
+      }
+    ];
+
+    let currentZoneIdx = 0;
+    let currentQuestionIdx = 0;
+    let playerHP = 100;
+    let bossHP = 100;
+    let battleTimerInterval = null;
+    let battleTimeLeft = 20;
+    let isQuestionLocked = false;
+
+    function startZoneBattle(zoneIdx) {
+      currentZoneIdx = zoneIdx;
+      currentQuestionIdx = 0;
+      playerHP = 100;
+      bossHP = 100;
+      updateHPBars();
+
+      const zone = zoneData[zoneIdx];
+      document.getElementById('boss-name').innerText = zone.bossName;
+      document.getElementById('boss-avatar-icon').className = `fa-solid ${zone.bossIcon}`;
+      document.getElementById('battle-question-zone').innerText = zone.zoneName;
+
+      document.getElementById('battle-cleared-card').classList.add('hidden');
+      document.getElementById('boss-question-stage').classList.remove('hidden');
+
+      switchGameMode('boss');
+      loadBattleQuestion();
+    }
+
+    function updateHPBars() {
+      const pBar = document.getElementById('player-hp-bar');
+      const bBar = document.getElementById('boss-hp-bar');
+      const pText = document.getElementById('player-hp-text');
+      const bText = document.getElementById('boss-hp-text');
+
+      pBar.style.width = `${Math.max(0, playerHP)}%`;
+      bBar.style.width = `${Math.max(0, bossHP)}%`;
+      pText.innerText = `HP ${playerHP} / 100`;
+      bText.innerText = `HP ${bossHP} / 100`;
+    }
+
+    function useSkill(type) {
+      playSound('click');
+      if (type === 'gotongroyong') {
+        const zone = zoneData[currentZoneIdx];
+        const qData = zone.questions[currentQuestionIdx];
+        let eliminated = 0;
+        qData.options.forEach((_, idx) => {
+          if (idx !== qData.correct && eliminated < 2) {
+            const btn = document.getElementById(`atk-btn-${idx}`);
+            if (btn) {
+              btn.classList.add('opacity-20');
+              btn.disabled = true;
+            }
+            eliminated++;
+          }
+        });
+        document.getElementById('skill-gotongroyong').disabled = true;
+        document.getElementById('skill-gotongroyong').classList.add('opacity-50');
+      } else if (type === 'noken') {
+        battleTimeLeft += 15;
+        document.getElementById('battle-timer').innerText = `${battleTimeLeft}s`;
+        document.getElementById('skill-noken').disabled = true;
+        document.getElementById('skill-noken').classList.add('opacity-50');
+      } else if (type === 'sekaten') {
+        doubleXpActive = true;
+        document.getElementById('skill-sekaten').disabled = true;
+        document.getElementById('skill-sekaten').classList.add('opacity-50');
+      }
+    }
+
+    function loadBattleQuestion() {
+      isQuestionLocked = false;
+      clearInterval(battleTimerInterval);
+      battleTimeLeft = 20;
+      document.getElementById('battle-timer').innerText = `${battleTimeLeft}s`;
+      document.getElementById('battle-result-feedback').classList.add('hidden');
+
+      const zone = zoneData[currentZoneIdx];
+      const qData = zone.questions[currentQuestionIdx];
+
+      document.getElementById('battle-question-count').innerText = `Mantra ${currentQuestionIdx + 1} / ${zone.questions.length}`;
+      document.getElementById('battle-question-prompt').innerText = qData.q;
+
+      const grid = document.getElementById('battle-answers-grid');
+      grid.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+
+      qData.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.id = `atk-btn-${idx}`;
+        btn.className = 'tv-btn p-5 rounded-2xl bg-slate-950 hover:bg-slate-800 border-2 border-slate-800 hover:border-amber-400 text-left flex items-start gap-3.5 transition-all shadow-md group';
+        btn.onclick = () => selectBattleAnswer(idx);
+        btn.innerHTML = `
+          <span class="w-10 h-10 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center font-game text-amber-400 shrink-0 text-base group-hover:bg-amber-500 group-hover:text-slate-950 transition-colors">
+            ${letters[idx]}
+          </span>
+          <span class="text-sm md:text-base font-bold text-slate-100 leading-snug pt-1">${opt}</span>
+        `;
+        grid.appendChild(btn);
+      });
+
+      battleTimerInterval = setInterval(() => {
+        battleTimeLeft--;
+        document.getElementById('battle-timer').innerText = `${battleTimeLeft}s`;
+        if (battleTimeLeft <= 0) {
+          clearInterval(battleTimerInterval);
+          selectBattleAnswer(-1);
+        }
+      }, 1000);
+    }
+
+    function selectBattleAnswer(idx) {
+      if (isQuestionLocked) return;
+      isQuestionLocked = true;
+      clearInterval(battleTimerInterval);
+
+      const zone = zoneData[currentZoneIdx];
+      const qData = zone.questions[currentQuestionIdx];
+      const isCorrect = idx === qData.correct;
+
+      qData.options.forEach((_, optIdx) => {
+        const btn = document.getElementById(`atk-btn-${optIdx}`);
+        btn.disabled = true;
+        if (optIdx === qData.correct) {
+          btn.className = 'tv-btn p-5 rounded-2xl bg-emerald-950 border-2 border-emerald-500 text-left flex items-start gap-3.5 shadow-lg text-emerald-200';
+        } else if (optIdx === idx) {
+          btn.className = 'tv-btn p-5 rounded-2xl bg-rose-950 border-2 border-rose-500 text-left flex items-start gap-3.5 shadow-lg text-rose-200';
+        } else {
+          btn.classList.add('opacity-40');
+        }
+      });
+
+      const feedbackBox = document.getElementById('battle-result-feedback');
+      const feedbackTitle = document.getElementById('battle-feedback-title');
+      const feedbackText = document.getElementById('battle-feedback-text');
+      const feedbackIcon = document.getElementById('battle-feedback-icon');
+
+      if (isCorrect) {
+        comboStreak++;
+        if (comboStreak >= 2) {
+          document.getElementById('streak-badge').classList.remove('hidden');
+          document.getElementById('streak-badge').innerText = `🔥 COMBO x${comboStreak}!`;
+        }
+
+        playSound('crit');
+        bossHP = Math.max(0, bossHP - 35);
+        addXP(50);
+
+        const bAvatar = document.getElementById('boss-avatar-box');
+        bAvatar.classList.add('animate-shake');
+        setTimeout(() => bAvatar.classList.remove('animate-shake'), 500);
+
+        feedbackTitle.innerText = "SERANGAN PUSAKA BERHASIL! (CRITICAL HIT)";
+        feedbackTitle.className = "font-game text-lg text-emerald-400";
+        feedbackIcon.innerHTML = `<i class="fa-solid fa-burst text-emerald-400"></i>`;
+      } else {
+        comboStreak = 0;
+        document.getElementById('streak-badge').classList.add('hidden');
+        playSound('hurt');
+        playerHP = Math.max(0, playerHP - 25);
+
+        const arena = document.getElementById('battle-arena-box');
+        arena.classList.add('animate-shake');
+        setTimeout(() => arena.classList.remove('animate-shake'), 500);
+
+        feedbackTitle.innerText = idx === -1 ? "WAKTU HABIS! PENJAGA MEMBALAS!" : "JAWABAN KURANG TEPAT! SERANGAN MELESET!";
+        feedbackTitle.className = "font-game text-lg text-rose-400";
+        feedbackIcon.innerHTML = `<i class="fa-solid fa-shield-halved text-rose-400"></i>`;
+      }
+
+      feedbackText.innerText = qData.explain;
+      updateHPBars();
+      feedbackBox.classList.remove('hidden');
+    }
+
+    function nextBattleTurn() {
+      playSound('click');
+      const zone = zoneData[currentZoneIdx];
+
+      if (bossHP <= 0 || currentQuestionIdx + 1 >= zone.questions.length) {
+        finishZoneBattle(bossHP <= 0 || playerHP > 0);
+      } else {
+        currentQuestionIdx++;
+        loadBattleQuestion();
+      }
+    }
+
+    function finishZoneBattle(isVictory) {
+      playSound('victory');
+      fireConfetti();
+      document.getElementById('boss-question-stage').classList.add('hidden');
+      const clearedCard = document.getElementById('battle-cleared-card');
+      clearedCard.classList.remove('hidden');
+
+      if (isVictory) {
+        unlockedIslands[currentZoneIdx] = true;
+        updateRelicBadges();
+        document.getElementById('battle-cleared-title').innerText = "PUSAKA BERHASIL DIAMBIL ALIH!";
+        document.getElementById('battle-cleared-desc').innerText = `Hebat! Kalian telah menguasai kearifan lokal di ${zoneData[currentZoneIdx].zoneName}.`;
+      } else {
+        document.getElementById('battle-cleared-title').innerText = "PERJUANGAN BELUM SELESAI!";
+        document.getElementById('battle-cleared-desc').innerText = "Ayo diskusikan kembali bersama teman kelas dan rebut kembali pusaka leluhur!";
+      }
+
+      const allCleared = unlockedIslands.every(v => v === true);
+      if (allCleared) {
+        setTimeout(openVictoryModal, 1500);
+      }
+    }
+
+    function updateRelicBadges() {
+      let count = 0;
+      unlockedIslands.forEach((isUnlocked, idx) => {
+        const badge = document.getElementById(`badge-island-${idx}`);
+        if (isUnlocked) {
+          count++;
+          badge.className = 'w-8 h-8 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black';
+          badge.innerHTML = `<i class="fa-solid fa-check"></i>`;
+        }
+      });
+      document.getElementById('relics-collected-display').innerText = `${count} / 5`;
+    }
+
+    const duelQuestions = [
+      {
+        q: "Apa nama kain tradisional suku Batak yang sarat makna doa restu dan kasih sayang?",
+        options: ["Kain Ulos", "Kain Sasirangan", "Kain Batik", "Kain Tenun Ikat"],
+        correct: 0,
+        exp: "Kain Ulos berasal dari Sumatera Utara dan diberikan sebagai simbol doa restu."
+      },
+      {
+        q: "Tradisi Sekaten di Keraton Surakarta dan Yogyakarta diadakan untuk memperingati apa?",
+        options: ["Maulid Nabi Muhammad SAW", "Tahun Baru Masehi", "Hari Kemerdekaan", "Panen Padi"],
+        correct: 0,
+        exp: "Sekaten memperingati Maulid Nabi Muhammad SAW dengan alunan gamelan Kyai Gunturmadu."
+      },
+      {
+        q: "Tradisi tarian perang cambuk wujud syukur panen di Manggarai Flores dinamakan...",
+        options: ["Tari Pendet", "Tari Caci", "Tari Saman", "Tari Piring"],
+        correct: 1,
+        exp: "Tari Caci merupakan tradisi adu ketangkasan dan sportivitas ksatria Manggarai."
+      },
+      {
+        q: "Tas rajut khas Papua yang diakui UNESCO tahun 2012 sebagai Warisan Budaya Takbenda adalah...",
+        options: ["Noken", "Tas Anyam Rotan", "Tas Daun Pandan", "Tas Tikar"],
+        correct: 0,
+        exp: "Noken Papua dirajut dari serat kayu alami dan dibawa menggunakan kepala."
+      },
+      {
+        q: "Sebutkan salah satu dari 5 Nilai Luhur Budaya Indonesia menurut buku IPAS Bab 4!",
+        options: ["Gotong Royong", "Individualisme", "Sikap Konsumtif", "Membanggakan Budaya Asing"],
+        correct: 0,
+        exp: "Gotong royong, toleransi, musyawarah, santun, dan cinta tanah air adalah 5 nilai luhur bangsa."
+      },
+      {
+        q: "Tradisi adat malam sebelum pernikahan di Minangkabau yang menggunakan daun inai disebut...",
+        options: ["Malam Bainai", "Rambu Solo'", "Ngaben", "Pasola"],
+        correct: 0,
+        exp: "Malam Bainai adalah ritual memasangkan inai ke kuku calon mempelai perempuan di Minangkabau."
+      },
+      {
+        q: "Mengapa tradisi cium tangan dan halal bihalal tetap lestari di Indonesia hingga saat ini?",
+        options: [
+          "Diajarkan dan dibiasakan turun-temurun sejak kecil",
+          "Ada sanksi denda uang bagi yang melanggar",
+          "Membutuhkan peralatan teknologi paling mahal",
+          "Hanya dilaksanakan oleh pejabat daerah"
+        ],
+        correct: 0,
+        exp: "Tradisi bertahan karena diajarkan dan dicontohkan sejak kecil secara konsisten oleh orang tua dan guru."
+      }
+    ];
+
+    let currentDuelQIdx = 0;
+    let duelLockedTeam = null;
+    let isDuelAnswered = false;
+
+    function resetDuelScore() {
+      playSound('click');
+      scoreTeamA = 0;
+      scoreTeamB = 0;
+      updateDuelScoreUI();
+    }
+
+    function adjustTeamScore(team, amount) {
+      playSound('coin');
+      if (team === 'A') scoreTeamA = Math.max(0, scoreTeamA + amount);
+      else scoreTeamB = Math.max(0, scoreTeamB + amount);
+      updateDuelScoreUI();
+    }
+
+    function updateDuelScoreUI() {
+      document.getElementById('duel-score-a-big').innerText = `${scoreTeamA} Pts`;
+      document.getElementById('duel-score-b-big').innerText = `${scoreTeamB} Pts`;
+      document.getElementById('hud-score-a').innerText = scoreTeamA;
+      document.getElementById('hud-score-b').innerText = scoreTeamB;
+    }
+
+    function loadNextDuelQuestion() {
+      playSound('click');
+      duelLockedTeam = null;
+      isDuelAnswered = false;
+      document.getElementById('buzzer-btn-a').disabled = false;
+      document.getElementById('buzzer-btn-b').disabled = false;
+      document.getElementById('buzzer-btn-a').classList.remove('opacity-40');
+      document.getElementById('buzzer-btn-b').classList.remove('opacity-40');
+      document.getElementById('duel-verdict-box').classList.add('hidden');
+
+      const statusText = document.getElementById('duel-locked-status');
+      statusText.innerText = "🔔 Menunggu Bel Ditekan oleh Salah Satu Tim...";
+      statusText.className = "text-xs md:text-sm font-game text-amber-400 uppercase tracking-wider";
+
+      const q = duelQuestions[currentDuelQIdx % duelQuestions.length];
+      document.getElementById('duel-q-index').innerText = `Tantangan Cepat ${(currentDuelQIdx % duelQuestions.length) + 1} / ${duelQuestions.length}`;
+      document.getElementById('duel-q-text').innerText = q.q;
+
+      const grid = document.getElementById('duel-options-grid');
+      grid.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.id = `duel-opt-${idx}`;
+        btn.disabled = true;
+        btn.className = 'tv-btn p-4 rounded-2xl bg-slate-950 border-2 border-slate-800 text-left flex items-start gap-3 opacity-50 cursor-not-allowed';
+        btn.onclick = () => selectDuelAnswer(idx);
+        btn.innerHTML = `
+          <span class="w-8 h-8 rounded-lg bg-slate-900 border border-slate-700 flex items-center justify-center font-game text-amber-400 shrink-0 text-sm">
+            ${letters[idx]}
+          </span>
+          <span class="text-sm font-bold text-slate-100 pt-1">${opt}</span>
+        `;
+        grid.appendChild(btn);
+      });
+
+      currentDuelQIdx++;
+    }
+
+    function pressBuzzer(team) {
+      if (duelLockedTeam !== null || isDuelAnswered) return;
+      duelLockedTeam = team;
+
+      if (team === 'A') {
+        playSound('buzzerA');
+        document.getElementById('buzzer-btn-b').disabled = true;
+        document.getElementById('buzzer-btn-b').classList.add('opacity-40');
+        const status = document.getElementById('duel-locked-status');
+        status.innerText = "⚡ BEL DIKUNCI: TIM GARUDA MERAH (A) MENJAWAB!";
+        status.className = "text-xs md:text-sm font-game text-rose-400 uppercase tracking-wider";
+      } else {
+        playSound('buzzerB');
+        document.getElementById('buzzer-btn-a').disabled = true;
+        document.getElementById('buzzer-btn-a').classList.add('opacity-40');
+        const status = document.getElementById('duel-locked-status');
+        status.innerText = "⚡ BEL DIKUNCI: TIM RAJAWALI BIRU (B) MENJAWAB!";
+        status.className = "text-xs md:text-sm font-game text-cyan-400 uppercase tracking-wider";
+      }
+
+      const q = duelQuestions[(currentDuelQIdx - 1) % duelQuestions.length];
+      q.options.forEach((_, idx) => {
+        const btn = document.getElementById(`duel-opt-${idx}`);
+        btn.disabled = false;
+        btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        btn.classList.add('hover:border-amber-400');
+      });
+    }
+
+    function selectDuelAnswer(idx) {
+      if (isDuelAnswered) return;
+      isDuelAnswered = true;
+
+      const q = duelQuestions[(currentDuelQIdx - 1) % duelQuestions.length];
+      const isCorrect = idx === q.correct;
+      const verdictBox = document.getElementById('duel-verdict-box');
+      const verdictText = document.getElementById('duel-verdict-text');
+
+      q.options.forEach((_, optIdx) => {
+        const btn = document.getElementById(`duel-opt-${optIdx}`);
+        btn.disabled = true;
+        if (optIdx === q.correct) {
+          btn.className = 'tv-btn p-4 rounded-2xl bg-emerald-950 border-2 border-emerald-500 text-left flex items-start gap-3 text-emerald-200';
+        } else if (optIdx === idx) {
+          btn.className = 'tv-btn p-4 rounded-2xl bg-rose-950 border-2 border-rose-500 text-left flex items-start gap-3 text-rose-200';
+        }
+      });
+
+      if (isCorrect) {
+        playSound('crit');
+        fireConfetti();
+        if (duelLockedTeam === 'A') scoreTeamA += 20;
+        else scoreTeamB += 20;
+        addXP(20);
+
+        verdictText.innerHTML = `🎉 <span class="text-emerald-400 font-bold">JAWABAN BENAR!</span> Poin +20 untuk Tim ${duelLockedTeam === 'A' ? 'Garuda Merah' : 'Rajawali Biru'}! <br><span class="text-xs text-slate-300 font-normal">${q.exp}</span>`;
+      } else {
+        playSound('hurt');
+        if (duelLockedTeam === 'A') scoreTeamA = Math.max(0, scoreTeamA - 10);
+        else scoreTeamB = Math.max(0, scoreTeamB - 10);
+
+        verdictText.innerHTML = `❌ <span class="text-rose-400 font-bold">JAWABAN SALAH!</span> -10 Poin. Kesempatan beralih! <br><span class="text-xs text-slate-300 font-normal">${q.exp}</span>`;
+      }
+
+      updateDuelScoreUI();
+      verdictBox.classList.remove('hidden');
+    }
+
+    /* Keyboard shortcuts for Smart TV Buzzers */
+    window.addEventListener('keydown', (e) => {
+      const activeMode = document.getElementById('view-duel');
+      if (activeMode && !activeMode.classList.contains('hidden')) {
+        if (e.key.toLowerCase() === 'a' || e.key.toLowerCase() === 'z') {
+          pressBuzzer('A');
+        } else if (e.key.toLowerCase() === 'l' || e.key.toLowerCase() === 'k' || e.key === 'Enter') {
+          pressBuzzer('B');
+        }
+      }
+    });
+
+    let arcadeRunning = false;
+    let arcadeScore = 0;
+    let arcadeTimer = 45;
+    let arcadeTimerInterval = null;
+    let arcadeCanvas, arcadeCtx;
+
+    let paddle = { x: 200, y: 350, width: 110, height: 26, speed: 35 };
+    let fallingItems = [];
+    const itemTypes = [
+      { name: "Noken", icon: "🎒", color: "#10b981", points: 30, isGood: true },
+      { name: "Gamelan", icon: "🔔", color: "#f59e0b", points: 20, isGood: true },
+      { name: "Keris", icon: "🗡️", color: "#0ea5e9", points: 25, isGood: true },
+      { name: "Batik", icon: "👘", color: "#8b5cf6", points: 20, isGood: true },
+      { name: "Candi", icon: "🏛️", color: "#eab308", points: 35, isGood: true },
+      { name: "Sampah", icon: "🗑️", color: "#f43f5e", points: -15, isGood: false },
+      { name: "Hoax", icon: "📵", color: "#e11d48", points: -20, isGood: false },
+      { name: "Egois", icon: "🚫", color: "#be123c", points: -25, isGood: false }
+    ];
+
+    function startArcadeGame() {
+      playSound('click');
+      initAudio();
+      document.getElementById('arcade-overlay').classList.add('hidden');
+      arcadeRunning = true;
+      arcadeScore = 0;
+      arcadeTimer = 45;
+      fallingItems = [];
+
+      arcadeCanvas = document.getElementById('arcade-canvas');
+      arcadeCtx = arcadeCanvas.getContext('2d');
+      resizeArcadeCanvas();
+
+      paddle.y = arcadeCanvas.height - 45;
+      paddle.x = arcadeCanvas.width / 2 - paddle.width / 2;
+
+      document.getElementById('arcade-score-val').innerText = arcadeScore;
+      document.getElementById('arcade-timer-val').innerText = `${arcadeTimer}s`;
+
+      clearInterval(arcadeTimerInterval);
+      arcadeTimerInterval = setInterval(() => {
+        arcadeTimer--;
+        document.getElementById('arcade-timer-val').innerText = `${arcadeTimer}s`;
+        if (arcadeTimer <= 0) endArcadeGame();
+      }, 1000);
+
+      requestAnimationFrame(arcadeGameLoop);
+    }
+
+    function resizeArcadeCanvas() {
+      if (!arcadeCanvas) return;
+      arcadeCanvas.width = arcadeCanvas.parentElement.clientWidth;
+      arcadeCanvas.height = arcadeCanvas.parentElement.clientHeight;
+      paddle.y = arcadeCanvas.height - 45;
+    }
+
+    function moveArcadePaddle(deltaX) {
+      if (!arcadeRunning) return;
+      paddle.x += deltaX;
+      if (paddle.x < 0) paddle.x = 0;
+      if (paddle.x + paddle.width > arcadeCanvas.width) {
+        paddle.x = arcadeCanvas.width - paddle.width;
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') moveArcadePaddle(-35);
+      if (e.key === 'ArrowRight') moveArcadePaddle(35);
+    });
+
+    function handleCanvasTouch(e) {
+      if (!arcadeRunning || !arcadeCanvas) return;
+      const rect = arcadeCanvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const touchX = clientX - rect.left;
+      paddle.x = touchX - paddle.width / 2;
+      if (paddle.x < 0) paddle.x = 0;
+      if (paddle.x + paddle.width > arcadeCanvas.width) {
+        paddle.x = arcadeCanvas.width - paddle.width;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const c = document.getElementById('arcade-canvas');
+      if (c) {
+        c.addEventListener('mousemove', handleCanvasTouch);
+        c.addEventListener('touchmove', handleCanvasTouch);
+      }
+    });
+
+    function spawnFallingItem() {
+      if (Math.random() < 0.055) {
+        const item = itemTypes[Math.floor(Math.random() * itemTypes.length)];
+        fallingItems.push({
+          x: Math.random() * (arcadeCanvas.width - 50) + 25,
+          y: -20,
+          speed: Math.random() * 2 + 2.8,
+          type: item
+        });
+      }
+    }
+
+    function arcadeGameLoop() {
+      if (!arcadeRunning) return;
+      arcadeCtx.clearRect(0, 0, arcadeCanvas.width, arcadeCanvas.height);
+
+      arcadeCtx.fillStyle = '#f59e0b';
+      arcadeCtx.beginPath();
+      arcadeCtx.roundRect(paddle.x, paddle.y, paddle.width, paddle.height, 12);
+      arcadeCtx.fill();
+      arcadeCtx.strokeStyle = '#fbbf24';
+      arcadeCtx.lineWidth = 3;
+      arcadeCtx.stroke();
+
+      arcadeCtx.fillStyle = '#090d16';
+      arcadeCtx.font = 'bold 12px "Rowdies"';
+      arcadeCtx.textAlign = 'center';
+      arcadeCtx.fillText('KERANJANG PUSAKA', paddle.x + paddle.width / 2, paddle.y + 17);
+
+      spawnFallingItem();
+
+      for (let i = fallingItems.length - 1; i >= 0; i--) {
+        const it = fallingItems[i];
+        it.y += it.speed;
+
+        arcadeCtx.beginPath();
+        arcadeCtx.arc(it.x, it.y, 20, 0, Math.PI * 2);
+        arcadeCtx.fillStyle = it.type.color;
+        arcadeCtx.fill();
+
+        arcadeCtx.font = '18px serif';
+        arcadeCtx.textAlign = 'center';
+        arcadeCtx.textBaseline = 'middle';
+        arcadeCtx.fillText(it.type.icon, it.x, it.y);
+
+        if (
+          it.y + 18 >= paddle.y &&
+          it.y - 18 <= paddle.y + paddle.height &&
+          it.x >= paddle.x &&
+          it.x <= paddle.x + paddle.width
+        ) {
+          if (it.type.isGood) {
+            playSound('coin');
+            arcadeScore += it.type.points;
+            addXP(it.type.points);
+          } else {
+            playSound('hurt');
+            arcadeScore = Math.max(0, arcadeScore + it.type.points);
+          }
+          document.getElementById('arcade-score-val').innerText = arcadeScore;
+          fallingItems.splice(i, 1);
+          continue;
+        }
+
+        if (it.y > arcadeCanvas.height + 30) {
+          fallingItems.splice(i, 1);
+        }
+      }
+
+      requestAnimationFrame(arcadeGameLoop);
+    }
+
+    function endArcadeGame() {
+      arcadeRunning = false;
+      clearInterval(arcadeTimerInterval);
+      playSound('victory');
+      fireConfetti();
+
+      const overlay = document.getElementById('arcade-overlay');
+      overlay.classList.remove('hidden');
+      overlay.innerHTML = `
+        <div class="text-6xl text-amber-400"><i class="fa-solid fa-trophy"></i></div>
+        <h3 class="text-3xl font-game text-white">WAKTU HABIS!</h3>
+        <p class="text-lg font-bold text-emerald-400">Total Skor Akhir: ${arcadeScore} Poin</p>
+        <p class="text-xs text-slate-300">Pusaka berhasil diselamatkan dan dimasukkan ke lumbung budaya nusantara!</p>
+        <button onclick="startArcadeGame()" class="tv-btn px-8 py-3.5 bg-emerald-500 text-slate-950 font-game text-sm rounded-2xl shadow-xl mt-2">
+          MAIN LAGI (ULANG)
+        </button>
+      `;
+    }
+
+    const teachersList = [
+      { name: "Bu Riris", role: "Guru Kelas 6", tradition: "Pakaian Adat Pernikahan & Sungkeman", reason: "Selalu dipakai dalam setiap upacara pernikahan dan mengajarkan doa restu orang tua.", ttd: "Riris, S.Pd", stamped: true },
+      { name: "Pak Made", role: "Guru PJOK", tradition: "Canang Sari & Ngaben Bali", reason: "Menjaga keharmonisan manusia dengan Sang Pencipta dan alam semesta.", ttd: "W. Made, M.Pd", stamped: false },
+      { name: "Bu Martha", role: "Guru IPA", tradition: "Kain Tenun Ikat & Makan Jagung Bose", reason: "Kain tenun menyimpan motif silsilah marga leluhur di NTT.", ttd: "Martha S.", stamped: false },
+      { name: "Pak Joko", role: "Kepala Sekolah", tradition: "Tradisi Halalbihalal & Tumpengan", reason: "Mempererat persaudaraan guru dan memohon kelancaran belajar siswa.", ttd: "Joko W., M.Pd", stamped: false },
+      { name: "Bu Dewi", role: "Guru Matematika", tradition: "Malam Bainai Minangkabau", reason: "Simbol kasih sayang melepas anak gadis menuju jenjang pernikahan.", ttd: "Dewi P.", stamped: false },
+      { name: "Pak Asep", role: "Guru Seni Budaya", tradition: "Gamelan Degung & Seren Taun Sunda", reason: "Rasa syukur kepada Tuhan atas hasil bumi melimpah.", ttd: "Asep S.", stamped: false },
+      { name: "Bu Fatimah", role: "Guru Agama", tradition: "Bagi THR & Silaturahmi Idulfitri", reason: "Membiasakan sedekah dan saling memaafkan kesalahan.", ttd: "Fatimah, S.Ag", stamped: false },
+      { name: "Pak Simon", role: "Staf Tata Usaha", tradition: "Bakar Batu Papua", reason: "Lambang perdamaian dan kebersamaan seluruh warga suku.", ttd: "Simon P.", stamped: false },
+      { name: "Bu Sri", role: "Pustakawati", tradition: "Tradisi Sekaten & Gamelan", reason: "Peringatan Maulid Nabi yang menyatukan ajaran agama dan budaya Jawa.", ttd: "Sri Handayani", stamped: false },
+      { name: "Pak Budi", role: "Penjaga Sekolah", tradition: "Sambatan Gotong Royong Desa", reason: "Meringankan tetangga yang membangun rumah secara sukarela.", ttd: "Budi S.", stamped: false }
+    ];
+
+    let currentTeacherIdx = 0;
+
+    function renderTeachersRoster() {
+      const grid = document.getElementById('teachers-roster-grid');
+      grid.innerHTML = '';
+      let stampedCount = 0;
+
+      teachersList.forEach((t, idx) => {
+        if (t.stamped) stampedCount++;
+        const btn = document.createElement('button');
+        btn.className = `tv-btn p-2 rounded-xl text-left border flex items-center justify-between text-xs ${idx === currentTeacherIdx ? 'bg-cyan-600 text-slate-950 font-bold border-cyan-400' : 'bg-slate-900 text-slate-300 border-slate-800'}`;
+        btn.onclick = () => selectTeacherTab(idx);
+        btn.innerHTML = `
+          <span class="truncate">${idx + 1}. ${t.name}</span>
+          ${t.stamped ? '<i class="fa-solid fa-check text-emerald-400 text-[10px]"></i>' : '<i class="fa-solid fa-pen text-slate-500 text-[10px]"></i>'}
+        `;
+        grid.appendChild(btn);
+      });
+
+      document.getElementById('interview-count').innerText = stampedCount;
+    }
+
+    function selectTeacherTab(idx) {
+      playSound('click');
+      currentTeacherIdx = idx;
+      const t = teachersList[idx];
+
+      document.getElementById('active-teacher-name').innerText = t.name;
+      document.getElementById('active-teacher-role').innerText = t.role;
+      document.getElementById('active-teacher-tradition').innerText = `Warisan Budaya: ${t.tradition}`;
+      document.getElementById('active-teacher-reason').innerText = `"${t.reason}"`;
+
+      const stampEl = document.getElementById('teacher-ttd-stamp');
+      const stampBtn = document.getElementById('btn-stamp-interview');
+
+      if (t.stamped) {
+        stampEl.className = 'stamp-ttd text-base font-bold';
+        stampEl.innerText = `TTD: ${t.ttd} (Sah)`;
+        stampBtn.disabled = true;
+        stampBtn.className = 'tv-btn w-full px-5 py-2.5 bg-slate-800 text-slate-400 font-game text-xs rounded-xl shadow cursor-not-allowed';
+        stampBtn.innerHTML = `<span>SUDAH DITANDATANGANI</span>`;
+      } else {
+        stampEl.className = 'stamp-ttd text-base font-bold opacity-40 border-slate-600 text-slate-500';
+        stampEl.innerText = `[Belum Stempel]`;
+        stampBtn.disabled = false;
+        stampBtn.className = 'tv-btn w-full px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-game text-xs rounded-xl shadow';
+        stampBtn.innerHTML = `<i class="fa-solid fa-stamp mr-1"></i><span>STEMPEL TTD KELAS (+20 XP)</span>`;
+      }
+
+      renderTeachersRoster();
+    }
+
+    function stampInterviewSignature() {
+      const t = teachersList[currentTeacherIdx];
+      if (t.stamped) return;
+
+      playSound('coin');
+      fireConfetti();
+      t.stamped = true;
+      addXP(20);
+      selectTeacherTab(currentTeacherIdx);
+    }
+
+    function switchLabSubtab(sub) {
+      playSound('click');
+      const subs = ['interview', 'reflection', 'study'];
+      subs.forEach(s => {
+        const panel = document.getElementById(`lab-sub-${s}`);
+        const btn = document.getElementById(`subtab-btn-${s}`);
+        if (s === sub) {
+          panel.classList.remove('hidden');
+          panel.classList.add('flex');
+          btn.className = 'tv-btn px-4 py-2 rounded-xl text-xs font-bold bg-cyan-600 text-slate-950';
+        } else {
+          panel.classList.add('hidden');
+          panel.classList.remove('flex');
+          btn.className = 'tv-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300';
+        }
+      });
+    }
+
+    let currentReflection = { amati: "", pikirkan: "", ingintahu: "" };
+
+    function setReflection(column, text) {
+      playSound('click');
+      currentReflection[column] = text;
+
+      let summary = "";
+      if (currentReflection.amati) summary += `👀 [Amati]: ${currentReflection.amati}. `;
+      if (currentReflection.pikirkan) summary += `🧠 [Pikirkan]: ${currentReflection.pikirkan}. `;
+      if (currentReflection.ingintahu) summary += `❓ [Ingin Tahu]: ${currentReflection.ingintahu}.`;
+
+      document.getElementById('reflection-summary').innerText = summary || "Sentuh pilihan di atas untuk menyusun simpulan refleksi kelas!";
+    }
+
+    function saveClassInfographic() {
+      if (!currentReflection.amati && !currentReflection.pikirkan) {
+        document.getElementById('reflection-summary').innerText = "⚠️ Pilih minimal satu item Amati dan Pikirkan sebelum menyimpan simpulan!";
+        return;
+      }
+      playSound('victory');
+      fireConfetti();
+      addXP(40);
+      document.getElementById('reflection-summary').innerText = "🎉 Simpulan refleksi Tabel Halaman 90 berhasil disimpan dan dipresentasikan ke depan Smart TV! (+40 XP)";
+    }
+
+    const wheelSegments = [
+      { text: "Gotong Royong", color: "#10b981", action: "Sebutkan 1 contoh tradisi gotong royong di lingkungan sekolahmu dan jelaskan manfaatnya!" },
+      { text: "Wawancara Guru", color: "#f59e0b", action: "Pilih 1 guru di sekolah: Tanyakan tradisi keluarga apa yang masih dijalankan sampai sekarang!" },
+      { text: "Rambu Solo'", color: "#ef4444", action: "Dari daerah mana asal tradisi Rambu Solo' dan apa nilai penghormatan yang diajarkan di dalamnya?" },
+      { text: "Tari Caci NTT", color: "#8b5cf6", action: "Peragakan gaya ksatria tari Caci secara singkat dan jelaskan mengapa tarian ini melambangkan sportivitas!" },
+      { text: "Noken Papua", color: "#0ea5e9", action: "Mengapa tas Noken Papua diakui UNESCO sebagai Warisan Budaya Takbenda Dunia tahun 2012?" },
+      { text: "Pasola Sumba", color: "#f97316", action: "Apa tujuan masyarakat Sumba mengadakan permainan adu lempar lembing berkuda Pasola?" },
+      { text: "Toleransi Bangsa", color: "#ec4899", action: "Bagaimana cara kita menghormati teman sekelas yang memiliki tradisi adat berbeda dengan kita?" },
+      { text: "Teknologi & Batik", color: "#06b6d4", action: "Bagaimana cara generasi muda memanfaatkan internet atau media sosial untuk melestarikan budaya lokal?" }
+    ];
+
+    let currentAngle = 0;
+    let isSpinningWheel = false;
+
+    function drawWheel() {
+      const canvas = document.getElementById('wheel-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const radius = canvas.width / 2 - 10;
+      const numSegments = wheelSegments.length;
+      const anglePerSegment = (2 * Math.PI) / numSegments;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      wheelSegments.forEach((seg, i) => {
+        const startAngle = currentAngle + i * anglePerSegment;
+        const endAngle = startAngle + anglePerSegment;
+
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.closePath();
+        ctx.fillStyle = seg.color;
+        ctx.fill();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#090d16';
+        ctx.stroke();
+
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.rotate(startAngle + anglePerSegment / 2);
+        ctx.textAlign = 'right';
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 14px "Rowdies"';
+        ctx.shadowColor = 'rgba(0,0,0,0.6)';
+        ctx.shadowBlur = 4;
+        ctx.fillText(seg.text, radius - 24, 6);
+        ctx.restore();
+      });
+    }
+
+    function spinWheel() {
+      if (isSpinningWheel) return;
+      playSound('click');
+      isSpinningWheel = true;
+
+      const spinBtn = document.getElementById('spin-center-btn');
+      spinBtn.disabled = true;
+
+      let spinVelocity = Math.random() * 0.35 + 0.45;
+      const deceleration = 0.005;
+      let tick = 0;
+
+      const spinInterval = setInterval(() => {
+        currentAngle += spinVelocity;
+        spinVelocity -= deceleration;
+
+        tick++;
+        if (tick % 4 === 0) playSound('spin');
+
+        drawWheel();
+
+        if (spinVelocity <= 0) {
+          clearInterval(spinInterval);
+          isSpinningWheel = false;
+          spinBtn.disabled = false;
+          determineWheelResult();
+        }
+      }, 20);
+    }
+
+    function determineWheelResult() {
+      playSound('victory');
+      const numSegments = wheelSegments.length;
+      const anglePerSegment = (2 * Math.PI) / numSegments;
+
+      let normalizedAngle = (1.5 * Math.PI - currentAngle) % (2 * Math.PI);
+      if (normalizedAngle < 0) normalizedAngle += 2 * Math.PI;
+
+      const selectedIdx = Math.floor(normalizedAngle / anglePerSegment) % numSegments;
+      const selected = wheelSegments[selectedIdx];
+
+      document.getElementById('wheel-topic-badge').innerText = `TANTANGAN: ${selected.text}`;
+      document.getElementById('wheel-status-badge').innerText = "WAKTUNYA BERAKSI!";
+      document.getElementById('wheel-result-title').innerText = selected.text;
+      document.getElementById('wheel-result-desc').innerText = selected.action;
+      addXP(25);
+    }
+
+    function openVictoryModal() {
+      playSound('victory');
+      fireConfetti();
+      const modal = document.getElementById('grand-victory-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeVictoryModal() {
+      playSound('click');
+      const modal = document.getElementById('grand-victory-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function fireConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ['#f59e0b', '#10b981', '#0ea5e9', '#f43f5e', '#8b5cf6'];
+
+      for (let i = 0; i < 110; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          r: Math.random() * 6 + 3,
+          dx: (Math.random() - 0.5) * 15,
+          dy: (Math.random() - 0.7) * 16,
+          color: colors[Math.floor(Math.random() * colors.length)]
+        });
+      }
+
+      let frame = 0;
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        frame++;
+
+        particles.forEach(p => {
+          p.x += p.dx;
+          p.y += p.dy;
+          p.dy += 0.22;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+        });
+
+        if (frame < 120) {
+          requestAnimationFrame(animate);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+      animate();
+    }
+
+    window.onload = function() {
+      drawWheel();
+      resizeArcadeCanvas();
+      loadNextDuelQuestion();
+      renderTeachersRoster();
+      selectTeacherTab(0);
+
+      document.body.addEventListener('click', () => {
+        initAudio();
+      }, { once: true });
+    };
+
+    window.onresize = function() {
+      drawWheel();
+      resizeArcadeCanvas();
+    };
+  </script>
+</body>
+</html>
